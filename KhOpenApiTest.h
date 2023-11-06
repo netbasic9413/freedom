@@ -54,7 +54,7 @@
 #define DT_ZERO_NUMBER	4		// 콤파 숫자(0표시) 형식
 #define DT_SIGN			5		// 대비기호 형식
 
-#define		SAMPLE_VERSION				_T(" ver 2.73")
+#define		SAMPLE_VERSION				_T(" ver 1.00")
 
 typedef struct
 {
