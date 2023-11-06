@@ -13,3 +13,5 @@ Debug/KhOpenApiTest.Build.CppClean.log
 Debug/KhOpenApiTest.exe.recipe
 Debug/KhOpenApiTest.log
 Debug/KhOpenApiTest.vcxproj.FileListAbsolute.txt
+*.obj
+*.tlog

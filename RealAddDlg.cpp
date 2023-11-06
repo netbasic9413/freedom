@@ -487,12 +487,32 @@ void CRealAddDlg::OnBnClickedBtnAllcancel()
 
 void CRealAddDlg::OnBnClickedBtnCondi()
 {// 서버에 사용자 조건식 요청
-	long lRet = theApp.m_khOpenApi.GetConditionLoad();
-	if(lRet > 0)
+	//long lRet = theApp.m_khOpenApi.GetConditionLoad();
+
+	int i = 0;
+	CString strCondition, strConditionName, strIndex;
+	CString strConditionNameList = theApp.m_khOpenApi.GetConditionNameList();
+
+	//if(lRet > 0)
+	if(strConditionNameList.GetLength() > 0)
 	{
 		m_cmbCon.ResetContent();
 		m_mapNameList.RemoveAll();
 	}
+
+	while (AfxExtractSubString(strCondition, strConditionNameList, i++, _T(';')))
+	{
+		if (strCondition.IsEmpty())
+			continue;
+
+		AfxExtractSubString(strIndex, strCondition, 0, _T('^'));// 고유번호
+		AfxExtractSubString(strConditionName, strCondition, 1, _T('^'));// 조건식 이름
+
+		m_mapNameList.SetAt(strCondition, strIndex);
+		m_cmbCon.AddString(strCondition);
+	}
+
+	m_cmbCon.SetCurSel(0);
 }
 
 void CRealAddDlg::OnBnClickedBtnSendcond()

@@ -105,6 +105,7 @@
     <None Include="res\KhOpenApiTest.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AutoTradingConf.h" />
     <ClInclude Include="CurrentPriceDlg.h" />
     <ClInclude Include="GridCtrl\CellRange.h" />
     <ClInclude Include="GridCtrl\GridCell.h" />
@@ -126,6 +127,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AutoTradingConf.cpp" />
     <ClCompile Include="CurrentPriceDlg.cpp" />
     <ClCompile Include="GridCtrl\GridCell.cpp" />
     <ClCompile Include="GridCtrl\GridCellBase.cpp" />

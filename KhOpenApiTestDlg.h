@@ -66,4 +66,6 @@ protected:
 public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBntLOGIN();
+	afx_msg void OnBnClickedCancel();
+	afx_msg void OnBnClickedBtnAutoConfig();
 };

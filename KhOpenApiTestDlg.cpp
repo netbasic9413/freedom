@@ -22,6 +22,8 @@
 #include "KwanSimDlg.h"
 #include "RealAddDlg.h"
 #include "RateDlg.h"
+#include "AutoTradingConf.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -58,6 +60,8 @@ BEGIN_MESSAGE_MAP(CKhOpenApiTestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_CON, OnBnClickedBtnReal)
 	ON_BN_CLICKED(IDC_BUTTON1, &CKhOpenApiTestDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BTN_LOGIN, &CKhOpenApiTestDlg::OnBntLOGIN)
+	ON_BN_CLICKED(IDCANCEL, &CKhOpenApiTestDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDC_BTN_AUTO_CONFIG, &CKhOpenApiTestDlg::OnBnClickedBtnAutoConfig)
 END_MESSAGE_MAP()
 
 //*******************************************************************/
@@ -745,4 +749,21 @@ void CKhOpenApiTestDlg::OnBnClickedButton1()
 void CKhOpenApiTestDlg::OnBntLOGIN()
 {// OpenApi 立加 贸府(肺弊牢 芒 角青)
 	theApp.m_khOpenApi.CommConnect();
+}
+
+
+void CKhOpenApiTestDlg::OnBnClickedCancel()
+{
+	// TODO: Add your control notification handler code here
+	CDialogEx::OnCancel();
+}
+
+
+void CKhOpenApiTestDlg::OnBnClickedBtnAutoConfig()
+{
+	CAutoTradingConf* pAutoTradingConf = new CAutoTradingConf();
+	pAutoTradingConf->m_strScrNo.Format("%04d", m_nScrN0);
+	pAutoTradingConf->Create(IDD_AUTO_CONF_DLG);
+
+	m_mapScreen.SetAt(pAutoTradingConf->m_strScrNo, pAutoTradingConf);
 }
