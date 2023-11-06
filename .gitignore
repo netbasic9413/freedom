@@ -1,0 +1,15 @@
+*.ipch
+.vs/freedom/v16/Browse.VC.db
+*.db
+.vs/KhOpenApiTest/v16/Browse.VC.opendb
+*.db-wal
+*.db-shm
+*.suo
+.vs/VSWorkspaceState.json
+.vs/ProjectSettings.json
+.vs/slnx.sqlite
+RCa21640
+Debug/KhOpenApiTest.Build.CppClean.log
+Debug/KhOpenApiTest.exe.recipe
+Debug/KhOpenApiTest.log
+Debug/KhOpenApiTest.vcxproj.FileListAbsolute.txt

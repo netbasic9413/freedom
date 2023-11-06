@@ -6,7 +6,8 @@
 #include "MainDlg.h"
 #include "CurrentPriceDlg.h"
 #include "afxdialogex.h"
-
+#include "RealAddDlg.h"
+#include "RateDlg.h"
 
 // CMainDlg dialog
 
@@ -32,6 +33,9 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_CURRENTPRICE, &CMainDlg::OnBnClickedBtnCurrentprice)
+	ON_BN_CLICKED(IDC_BTN_LOGIN, &CMainDlg::OnBnClickedBtnLogin)
+	ON_BN_CLICKED(IDC_BTN_CON, &CMainDlg::OnBnClickedBtnCon)
+	ON_BN_CLICKED(IDC_BTN_CURRENTPRICE2, &CMainDlg::OnBnClickedBtnCurrentprice2)
 END_MESSAGE_MAP()
 
 
@@ -89,3 +93,45 @@ BOOL CMainDlg::GetNextScreenNum(int nScreenType)
 	return TRUE;
 }
 
+
+
+void CMainDlg::OnBnClickedBtnLogin()
+{
+	theApp.m_khOpenApi.CommConnect();
+}
+
+
+void CMainDlg::OnBnClickedBtnCon()
+{
+	if (!GetNextScreenNum(3))
+	{
+		return;
+	}
+
+	// 아래 함수를 호출하지 않으면 이후 조건명리스트를 불러올수가 없으니 조건 검색을 할 경우
+	// 무조건 이 함수를 처음에 불러와야 한다.
+	// 조건검색을 시작하려면 한번은 꼭 호출해야한다.
+	m_nRet = theApp.m_khOpenApi.GetConditionLoad();
+
+	if (m_nRet > 0)
+	{
+		CRealAddDlg* pRealAddDlg = new CRealAddDlg(this);
+		pRealAddDlg->m_strScrNo.Format(_T("%04d"), m_nScrN0);
+		pRealAddDlg->Create(IDD_CON_SET);
+
+		m_mapScreen.SetAt(pRealAddDlg->m_strScrNo, pRealAddDlg);
+	}
+}
+
+
+void CMainDlg::OnBnClickedBtnCurrentprice2()
+{
+	CString strTemp;
+	((CEdit*)GetDlgItem(IDC_EDT_JONGCODE2))->GetWindowText(strTemp);
+	if (strTemp.GetLength() != 6)
+		return;
+
+	CString strRe = theApp.m_khOpenApi.GetMasterStockState(strTemp);
+	AfxMessageBox(strRe);
+
+}

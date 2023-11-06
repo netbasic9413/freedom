@@ -17,7 +17,6 @@
 #include "KhOpenApiTest.h"
 #include "KhOpenApiTestDlg.h"
 #include "KHOpenAPICtrl.h"
-#include "MainDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -105,8 +104,7 @@ BOOL CKhOpenApiTestApp::InitInstance()
 		::CreateDirectory(strFileName, NULL);
 	}
 
-	//CKhOpenApiTestDlg dlg;
-	CMainDlg dlg;
+	CKhOpenApiTestDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 //	if (nResponse == IDOK)

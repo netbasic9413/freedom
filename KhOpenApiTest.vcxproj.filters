@@ -87,9 +87,6 @@
     <ClInclude Include="RateDlg.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MainDlg.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KhOpenApiTest.cpp">
@@ -135,9 +132,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="RateDlg.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MainDlg.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

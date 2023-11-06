@@ -21,6 +21,7 @@ public:
 	CMapStringToString m_mapScreenNum;
 	CMapStringToPtr m_mapScreen;
 	int m_nScrN0;
+	long		m_nRet;
 
 // Dialog Data
 	enum { IDD = IDD_MAIN_DLG };
@@ -33,4 +34,7 @@ public:
 	//CKhopenapictrl1 m_ctrlOpenAPI;
 	CKHOpenAPI	m_khOpenApi;
 	afx_msg void OnBnClickedBtnCurrentprice();
+	afx_msg void OnBnClickedBtnLogin();
+	afx_msg void OnBnClickedBtnCon();
+	afx_msg void OnBnClickedBtnCurrentprice2();
 };
