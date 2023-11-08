@@ -67,8 +67,6 @@ public:
 	afx_msg void OnBnClickedCheckEventLossRatio();
 	CButton m_checkMaxProfit;
 	afx_msg void OnBnClickedCheckMaxProfit();
-	CButton m_checkEventMaxProfit; //종목청산방식 - 최대익절
-	afx_msg void OnBnClickedCheckEventMaxProfit();
 	CButton m_checkEventMaxLoss;
 	afx_msg void OnBnClickedCheckEventMaxLossRatio();
 	CButton m_checkProfitMinEventCount;
@@ -80,4 +78,6 @@ public:
 	afx_msg void OnBnClickedCheckExeProfitLoss();
 	CButton m_checkFastBuy;
 	afx_msg void OnBnClickedCheckFastBuy();
+	afx_msg void OnBnClickedCheckEventMaxProfitRatio();
+	CButton m_checkEventMaxProfit;
 };

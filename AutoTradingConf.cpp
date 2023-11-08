@@ -42,13 +42,13 @@ void CAutoTradingConf::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_TRADING_STRATEGY, m_editTradingStrategy);
 	DDX_Control(pDX, IDC_CHECK_EVENT_PROFIT, m_checkEventProfit);
 	DDX_Control(pDX, IDC_CHECK_EVENT_LOSS_RATIO, m_checkEventLoss);
-	DDX_Control(pDX, IDC_CHECK_MAX_PROFIT, m_checkMaxProfit);
-	DDX_Control(pDX, IDC_CHECK_EVENT_MAX_PROFIT, m_checkEventMaxProfit);
+	//DDX_Control(pDX, IDC_CHECK_MAX_PROFIT, m_checkMaxProfit);
 	DDX_Control(pDX, IDC_CHECK_EVENT_MAX_LOSS_RATIO, m_checkEventMaxLoss);
 	DDX_Control(pDX, IDC_CHECK_PROFIT_MIN_EVENT_COUNT, m_checkProfitMinEventCount);
 	DDX_Control(pDX, IDC_CHECK_CANCEL_BUY_OUTSTANDING_ORDER, m_checkCancelBuyOutStandingOrder);
 	DDX_Control(pDX, IDC_CHECK_EXE_PROFIT_LOSS, m_checkExeProfitLoss);
 	DDX_Control(pDX, IDC_CHECK_FAST_BUY, m_checkFastBuy);
+	DDX_Control(pDX, IDC_CHECK_EVENT_MAX_PROFIT_RATIO, m_checkEventMaxProfit);
 }
 
 
@@ -76,13 +76,13 @@ BEGIN_MESSAGE_MAP(CAutoTradingConf, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_EVENT_PROFIT, &CAutoTradingConf::OnBnClickedCheckEventProfit)
 	ON_BN_CLICKED(IDC_CHECK_EVENT_LOSS_RATIO, &CAutoTradingConf::OnBnClickedCheckEventLossRatio)
 	ON_BN_CLICKED(IDC_CHECK_MAX_PROFIT, &CAutoTradingConf::OnBnClickedCheckMaxProfit)
-	ON_BN_CLICKED(IDC_CHECK_EVENT_MAX_PROFIT, &CAutoTradingConf::OnBnClickedCheckEventMaxProfit)
 	ON_BN_CLICKED(IDC_CHECK_EVENT_MAX_LOSS_RATIO, &CAutoTradingConf::OnBnClickedCheckEventMaxLossRatio)
 	ON_BN_CLICKED(IDC_CHECK_PROFIT_MIN_EVENT_COUNT, &CAutoTradingConf::OnBnClickedCheckProfitMinEventCount)
 	ON_EN_CHANGE(IDC_EDIT_PROFIT_MIN_EVENT_COUNT, &CAutoTradingConf::OnEnChangeEditProfitMinEventCount)
 	ON_BN_CLICKED(IDC_CHECK_CANCEL_BUY_OUTSTANDING_ORDER, &CAutoTradingConf::OnBnClickedCheckCancelBuyOutstandingOrder)
 	ON_BN_CLICKED(IDC_CHECK_EXE_PROFIT_LOSS, &CAutoTradingConf::OnBnClickedCheckExeProfitLoss)
 	ON_BN_CLICKED(IDC_CHECK_FAST_BUY, &CAutoTradingConf::OnBnClickedCheckFastBuy)
+	ON_BN_CLICKED(IDC_CHECK_EVENT_MAX_PROFIT_RATIO, &CAutoTradingConf::OnBnClickedCheckEventMaxProfitRatio)
 END_MESSAGE_MAP()
 
 
@@ -113,6 +113,8 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 	}
 
 	CString strFileName = theApp.m_sAppPath + "/data/"+ strTradingStrategy + ".ini";
+
+	
 
 	/*
 	//::WritePrivateProfileString("AUTO_TRADING_CONF", "TRADING_STRATEGY", m_strJongCode, strFileName);
@@ -273,10 +275,6 @@ void CAutoTradingConf::OnBnClickedCheckMaxProfit()
 }
 
 
-void CAutoTradingConf::OnBnClickedCheckEventMaxProfit()
-{
-	// TODO: Add your control notification handler code here
-}
 
 
 void CAutoTradingConf::OnBnClickedCheckEventMaxLossRatio()
@@ -315,6 +313,13 @@ void CAutoTradingConf::OnBnClickedCheckExeProfitLoss()
 
 
 void CAutoTradingConf::OnBnClickedCheckFastBuy()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+
+void CAutoTradingConf::OnBnClickedCheckEventMaxProfitRatio()
 {
 	// TODO: Add your control notification handler code here
 }
