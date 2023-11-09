@@ -27,14 +27,14 @@ void CAutoTradingConf::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_CHECK_AUTO_EXE, m_checkAutoExe);
 	DDX_Control(pDX, IDC_CHECK_BUY_MACRO, m_checkBuyMacro);
-	DDX_Control(pDX, IDC_TP_START_BUY_MACRO, m_dtpickerBuyMacroStart);
-	DDX_Control(pDX, IDC_TP_END_BUY_MACRO, m_dtpickerBuyMacroEnd);
+	//DDX_Control(pDX, IDC_TP_START_BUY_MACRO, m_dtpickerBuyMacroStart);
+	//DDX_Control(pDX, IDC_TP_END_BUY_MACRO, m_dtpickerBuyMacroEnd);
 	//DDX_Control(pDX, IDC_TP_START_TIME, m_dtpickerAutoTradingStart);
 	//DDX_Control(pDX, IDC_TP_END_TIME, m_dtpickerAutoTradingEnd);
 	DDX_Control(pDX, IDC_COMBO_BUY_MACRO, m_comboBuyMacro);
 	DDX_Control(pDX, IDC_CHECK_SEL_MACRO, m_checkSelMacro);
 	DDX_Control(pDX, IDC_CHECK_EXE_OWN, m_checkExeOwnEvent);
-	DDX_Control(pDX, IDC_TP_AT_ONCE_TIME, m_dtpickerMinTime);
+	//DDX_Control(pDX, IDC_TP_AT_ONCE_TIME, m_dtpickerMinTime);
 	DDX_Control(pDX, IDC_CHECK_PROFIT_RATIO, m_checkAllSelProfitRatio);
 	DDX_Control(pDX, IDC_CHECK_LOSS_RATIO, m_checkAllSelLossRatio);
 	DDX_Control(pDX, IDC_CHECK_PROFIT_AMOUNT, m_checkAllSellProfitAmount);
@@ -113,14 +113,14 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 		return;
 	}
 
-	CString strFileName = theApp.m_sAppPath + "/data/"+ strTradingStrategy + ".ini";
+	CString strFileName = theApp.m_sAppPath + "/data/" + strTradingStrategy + ".ini";
 
 	//시작시자동매매_자동실행
 	int nGetChk = m_checkAutoExe.GetCheck();
 	CString str;
 	str.Format(_T("%d"), nGetChk);
 	::WritePrivateProfileString("AUTO_TRADING_CONF", "check_exe_auto_trading", (LPCSTR)str, strFileName);
-	
+
 	//시작시자동매매_운영시간_시작
 	((CEdit*)GetDlgItem(IDC_EDIT_AUTOTRADING_RUNTIME_START))->GetWindowText(str);
 	if (str.GetLength() <= 0)
@@ -221,6 +221,223 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 	}
 	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_end", (LPCSTR)str, strFileName);
 
+	//자동매수조건설정_매도조건식(체크)
+	int nGetChkSelMacro = m_checkSelMacro.GetCheck();
+	str.Format(_T("%d"), nGetChkSelMacro);
+	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "check_sel_macro", (LPCSTR)str, strFileName);
+
+	//자동매수조건설정_보유종목 대상실행(체크)
+	int nGetChkExeOwnEvent = m_checkExeOwnEvent.GetCheck();
+	str.Format(_T("%d"), nGetChkExeOwnEvent);
+	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "check_exe_ownevent", (LPCSTR)str, strFileName);
+
+
+	//자동매수조건설정_보유종목 대상실행 (분 단위 재검색 시간)
+	if (nGetChkExeOwnEvent)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_MIN_TIME))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("보유종목 대상 실행 시간을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("AUTO_BUY_COND_CONF", "exe_ownevent_min_time", (LPCSTR)str, strFileName);
+	}
+
+	//자동매수조건설정_시간일괄청산설정(체크)
+	int nGetChkAtOnceSelTime = m_checkAtOnceSelTime.GetCheck();
+	str.Format(_T("%d"), nGetChkAtOnceSelTime);
+	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "check_atonce_seltime", (LPCSTR)str, strFileName);
+
+
+	//자동매수조건설정_시간일괄청산설정(시간)
+	if (nGetChkAtOnceSelTime)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_AT_ONCE_TIME))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("시간일괄청산설정 시간을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_end", (LPCSTR)str, strFileName);
+	}
+
+
+	//전체정산방식
+	//전체청산방식_익절률 IDC_CHECK_PROFIT_RATIO
+	int nGetChkAllSelProfitRatio = m_checkAllSelProfitRatio.GetCheck();
+	str.Format(_T("%d"), nGetChkAllSelProfitRatio);
+	::WritePrivateProfileString("ALL_SEL_CONF", "check_allsell_profitratio", (LPCSTR)str, strFileName);
+
+	if (nGetChkAllSelProfitRatio)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_PROFIT_RATIO))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("익절률을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("ALL_SEL_CONF", "allsel_profitratio", (LPCSTR)str, strFileName);
+	}
+
+	//전체청산방식_손절률 IDC_CHECK_LOSS_RATIO
+	int nGetChkAllSelLossRatio = m_checkAllSelLossRatio.GetCheck();
+	str.Format(_T("%d"), nGetChkAllSelLossRatio);
+	::WritePrivateProfileString("ALL_SEL_CONF", "check_allsell_lossratio", (LPCSTR)str, strFileName);
+
+	if (nGetChkAllSelLossRatio)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_LOSS_RATIO))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("손절률을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("ALL_SEL_CONF", "allsel_lossratio", (LPCSTR)str, strFileName);
+	}
+
+	//전체청산방식_익절금액
+	int nGetChkAllSellProfitAmount = m_checkAllSellProfitAmount.GetCheck();
+	str.Format(_T("%d"), nGetChkAllSellProfitAmount);
+	::WritePrivateProfileString("ALL_SEL_CONF", "check_allsell_profitamount", (LPCSTR)str, strFileName);
+
+	if (nGetChkAllSellProfitAmount)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_PROFIT_AMOUNT))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("익절금액을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("ALL_SEL_CONF", "allsel_profitamount", (LPCSTR)str, strFileName);
+	}
+
+
+	////전체청산방식_손절금액
+	int nGetChkllSellLossAmount = m_checkAllSellLossAmount.GetCheck();
+	str.Format(_T("%d"), nGetChkllSellLossAmount);
+	::WritePrivateProfileString("ALL_SEL_CONF", "check_allsell_lossamount", (LPCSTR)str, strFileName);
+
+	if (nGetChkAllSellProfitAmount)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_LOSS_AMOUNT))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("손절금액을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("ALL_SEL_CONF", "allsel_profitamount", (LPCSTR)str, strFileName);
+	}
+
+
+
+	//종모산정방식
+	//종목청산방식_종목익절
+	int nGetChkEventProfit = m_checkEventProfit.GetCheck();
+	str.Format(_T("%d"), nGetChkEventProfit);
+	::WritePrivateProfileString("EVENT_CONF", "check_event_profit", (LPCSTR)str, strFileName);
+
+	if (nGetChkEventProfit)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_EVENT_PROFIT_RATIO))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("종목익절률을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("EVENT_CONF", "event_profit", (LPCSTR)str, strFileName);
+	}
+
+
+
+
+	//종목청산방식_종목손절
+	int nGetChkEventLoss = m_checkEventLoss.GetCheck();
+	str.Format(_T("%d"), nGetChkEventLoss);
+	::WritePrivateProfileString("EVENT_CONF", "check_event_loss", (LPCSTR)str, strFileName);
+
+	if (nGetChkEventLoss)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_EVENT_LOSS_RATIO))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("종목손절률을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("EVENT_CONF", "event_loss", (LPCSTR)str, strFileName);
+	}
+
+
+	
+	//종목청산방식_최대익절
+	int nGetChkEventMaxProfit = m_checkEventMaxProfit.GetCheck();
+	str.Format(_T("%d"), nGetChkEventMaxProfit);
+	::WritePrivateProfileString("EVENT_CONF", "check_event_maxprofit", (LPCSTR)str, strFileName);
+
+	if (nGetChkEventMaxProfit)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_MAX_PROFIT_RATIO))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("종목청산방식의 최대익절률을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("EVENT_CONF", "event_maxprofit", (LPCSTR)str, strFileName);
+	}
+
+
+
+	//종목청산방식_최대손절(률)
+	int nGetChkEventMaxLoss = m_checkEventMaxLoss.GetCheck();
+	str.Format(_T("%d"), nGetChkEventMaxLoss);
+	::WritePrivateProfileString("EVENT_CONF", "check_event_maxloss", (LPCSTR)str, strFileName);
+
+	if (nGetChkEventMaxLoss)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_MAX_LOSS_RATIO))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("종목청산방식의 최대손절률을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("EVENT_CONF", "event_maxloss", (LPCSTR)str, strFileName);
+	}
+
+
+
+
+	//수익률계산 최소종목수 (체크)
+	//수익률계산 최소종목수 
+
+
+
+	//미체결매수주문취소(체크)
+	int nGetChkCancelBuyOutStandingOrder = m_checkCancelBuyOutStandingOrder.GetCheck();
+	str.Format(_T("%d"), nGetChkCancelBuyOutStandingOrder);
+	::WritePrivateProfileString("ETC_CONF", "check_cancel_buy_outstandingorder", (LPCSTR)str, strFileName);
+
+	if (nGetChkCancelBuyOutStandingOrder)
+	{
+		((CEdit*)GetDlgItem(IDC_EDIT_CANCEL_BUY_OUTSTANDING_ORDER))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("미체결 매수주문취소에 대한 초를 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("EVENT_CONF", "event_maxloss", (LPCSTR)str, strFileName);
+	}
+
+
+
+	//매수조건식 종료후 익절, 손절 실행
+
+
+	//번개 매수(빠른매수 실행)
+	int nGetChkFastBuy = m_checkFastBuy.GetCheck();
+	str.Format(_T("%d"), nGetChkFastBuy);
+	::WritePrivateProfileString("ETC_CONF", "check_fastbuy", (LPCSTR)str, strFileName);
+
+	
 
 
 	AfxMessageBox("저장을 완료하였습니다.");

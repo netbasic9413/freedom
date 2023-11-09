@@ -39,9 +39,9 @@ public:
 
 	CComboBox m_comboBuyMacro; //매수조건식
 	afx_msg void OnCbnSelchangeComboBuyMacro();
-	CDateTimeCtrl m_dtpickerBuyMacroStart; //매수조건식 시작시간
+	//CDateTimeCtrl m_dtpickerBuyMacroStart; //매수조건식 시작시간
 	afx_msg void OnDtnDatetimechangeTpStartBuyMacro(NMHDR* pNMHDR, LRESULT* pResult);
-	CDateTimeCtrl m_dtpickerBuyMacroEnd; //매수조건식 끝시간
+	//CDateTimeCtrl m_dtpickerBuyMacroEnd; //매수조건식 끝시간
 	afx_msg void OnDtnDatetimechangeTpEndBuyMacro(NMHDR* pNMHDR, LRESULT* pResult);
 	
 	afx_msg void OnDtnDatetimechangeTpEndTime(NMHDR* pNMHDR, LRESULT* pResult);
@@ -52,7 +52,7 @@ public:
 	afx_msg void OnBnClickedCheckSelMacro();
 	CButton m_checkExeOwnEvent; //보유종목 대상 실행
 	afx_msg void OnBnClickedCheckExeOwn();
-	CDateTimeCtrl m_dtpickerMinTime; //보유종목 대상 실행 분단위 설정
+	//CDateTimeCtrl m_dtpickerMinTime; //보유종목 대상 실행 분단위 설정
 	afx_msg void OnDtnDatetimechangeTpAtOnceTime(NMHDR* pNMHDR, LRESULT* pResult);
 	CButton m_checkAtOnceSelTime; //시간일괄청산 설정
 	afx_msg void OnBnClickedCheckAtOnceSelTime();
