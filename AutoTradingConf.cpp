@@ -451,7 +451,202 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 
 void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 {
-	// TODO: Add your control notification handler code here
+	CString strPathName;
+	char szFilter[] = "config (*.ini, *.conf) | *.ini;*.conf | All Files(*.*)|*.*||";
+	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY, szFilter);
+	if (IDOK == dlg.DoModal()) {
+		strPathName = dlg.GetPathName();
+	}
+
+	if (strPathName.GetLength() <= 0)
+	{
+		return;
+	}
+
+	CString strFileName = dlg.GetFileName();
+	char szItem[80];
+	int nSize = sizeof(szItem);
+	memset(szItem, 0, nSize);
+	SetDlgItemText(IDC_EDIT_TRADING_STRATEGY, strFileName);
+
+
+	//시작시 자동매매
+	::GetPrivateProfileString("AUTO_TRADING_CONF", "check_exe_auto_trading", "0", szItem, nSize, strPathName);
+	m_checkAutoExe.SetCheck(atoi(szItem));
+	//start time
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_TRADING_CONF", "autotrading_runtime_start", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_AUTOTRADING_RUNTIME_START, LPCTSTR(szItem));
+	//end time
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_TRADING_CONF", "autotrading_runtime_end", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_AUTOTRADING_RUNTIME_END, LPCTSTR(szItem));
+
+	//자동매수 조건 설정
+	//총 매수가능금액
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "total_possible_buy_amount", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_TOTAL_POSSIBLE_BUY_AMOUNT, LPCTSTR(szItem));
+	//종목별 매수금액
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "total_event_buy_amount", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_TOTAL_EVENT_BUY_AMOUNT, LPCTSTR(szItem));
+	//최대 매수종목수
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "max_buy_event_count", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_MAX_BUY_EVENT_COUNT, LPCTSTR(szItem));
+	//주당 매수 최고가
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "buy_highest_price_per_one", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_BUY_HIGHEST_PRICE_PER_ONE, LPCTSTR(szItem));
+	//주당 매수 최저가
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "buy_lowest_price_per_one", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_BUY_LOWEST_PRICE_PER_ONE, LPCTSTR(szItem));
+	//종목 최소 거래량
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "event_smallest_volume", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_EVENT_SMALLEST_VOLUME, LPCTSTR(szItem));
+	//매수조건식 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_buy_macro", "0", szItem, nSize, strPathName);
+	m_checkAutoExe.SetCheck(atoi(szItem));
+	//매수조건식 (시간)
+	//start
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_start", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_BUY_MACRO_TIME_START, LPCTSTR(szItem));
+	//end
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_end", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_BUY_MACRO_TIME_END, LPCTSTR(szItem));
+
+	//매도조건식 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_sel_macro", "0", szItem, nSize, strPathName);
+	m_checkAutoExe.SetCheck(atoi(szItem));
+
+	//보유종목 대상 실행 
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_exe_ownevent", "0", szItem, nSize, strPathName);
+	m_checkAutoExe.SetCheck(atoi(szItem));
+	//보유종목 대상 실행 (시간)
+	/*
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_start", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_MIN_TIME, LPCTSTR(szItem));
+	*/
+	
+
+
+	//시간일괄청산 설정 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_atonce_seltime", "0", szItem, nSize, strPathName);
+	m_checkAutoExe.SetCheck(atoi(szItem));
+
+	//시간일괄청산 설정 (시간)
+	/*
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_exe_ownevent", "0", szItem, nSize, strPathName);
+	m_checkAutoExe.SetCheck(atoi(szItem));
+	*/
+	
+
+	//전체청산방식
+	//익절률 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("ALL_SEL_CONF", "check_allsell_profitratio", "0", szItem, nSize, strPathName);
+	m_checkAllSelProfitRatio.SetCheck(atoi(szItem));
+	//익절률 (%)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("ALL_SEL_CONF", "allsel_profitratio", "0", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_PROFIT_RATIO, LPCTSTR(szItem));
+	//손절률 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("ALL_SEL_CONF", "check_allsell_lossratio", "0", szItem, nSize, strPathName);
+	m_checkAllSelLossRatio.SetCheck(atoi(szItem));
+	//손절률 (%)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("ALL_SEL_CONF", "allsel_lossratio", "0", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_LOSS_RATIO, LPCTSTR(szItem));
+	//익절금액(check)
+	memset(szItem, 0, nSize);
+	BOOL bCheck = FALSE;
+	bCheck = atoi(szItem);
+	::GetPrivateProfileString("ALL_SEL_CONF", "check_allsell_profitamount", "0", szItem, nSize, strPathName);
+	m_checkAllSellProfitAmount.SetCheck(bCheck);
+	//익절금액
+	if (bCheck)
+	{
+		//memset(szItem, 0, nSize);
+		//::GetPrivateProfileString("ALL_SEL_CONF", "allsel_profitratio", "0", szItem, nSize, strPathName);
+		//SetDlgItemText(IDC_EDIT_PROFIT_RATIO, LPCTSTR(szItem));
+	}
+
+	//손절금액(check)
+	bCheck = FALSE;
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("ALL_SEL_CONF", "check_allsell_profitamount", "0", szItem, nSize, strPathName);
+	m_checkAllSellLossAmount.SetCheck(atoi(szItem));
+	//손절금액
+	if (bCheck)
+	{
+
+
+	}
+
+	//종목청산방식
+	//종목익절 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "check_event_profit", "0", szItem, nSize, strPathName);
+	m_checkEventProfit.SetCheck(atoi(szItem));
+	//종목익절
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "event_profit", "0", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_EVENT_PROFIT_RATIO, LPCTSTR(szItem));
+	//종목손절 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "check_event_loss", "0", szItem, nSize, strPathName);
+	m_checkEventLoss.SetCheck(atoi(szItem));
+	//종목손절
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "event_loss", "0", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_EVENT_LOSS_RATIO, LPCTSTR(szItem));
+	//최대익절 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "check_event_maxprofit", "0", szItem, nSize, strPathName);
+	m_checkEventMaxProfit.SetCheck(atoi(szItem));
+	//최대익절
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "event_maxprofit", "0", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_MAX_PROFIT_RATIO, LPCTSTR(szItem));
+
+	//최대손절 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "check_event_maxloss", "0", szItem, nSize, strPathName);
+	m_checkEventMaxLoss.SetCheck(atoi(szItem));
+	//최대손절
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "event_maxloss", "0", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_MAX_LOSS_RATIO, LPCTSTR(szItem));
+
+
+	//ETC_CONF
+	//미체결 매수주문취소
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "check_cancel_buy_outstandingorder", "0", szItem, nSize, strPathName);
+	m_checkCancelBuyOutStandingOrder.SetCheck(atoi(szItem));
+
+	//미체결 매수주문취소 (초)
+	//memset(szItem, 0, nSize);
+	//::GetPrivateProfileString("EVENT_CONF", "event_maxloss", "0", szItem, nSize, strPathName);
+	//SetDlgItemText(IDC_EDIT_MAX_LOSS_RATIO, LPCTSTR(szItem));
+
+	//번개 매수(빠른 매수 실행)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "check_fastbuy", "0", szItem, nSize, strPathName);
+	m_checkFastBuy.SetCheck(atoi(szItem));
+
 }
 
 
