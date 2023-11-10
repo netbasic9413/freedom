@@ -145,6 +145,7 @@ BOOL CRateDlg::OnInitDialog()
 		, COMMISSION2 * 100
 		);
 	SetDlgItemText(IDC_ST_RATE_INFO, strMsg);
+	InitAcc();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -527,4 +528,48 @@ void CRateDlg::SetTotalRate()
 	strTotalRate.Format(_T("%0.2lf"), dTotalRate);
 	strTotalRate = theApp.ConvDataFormat(DT_NONE, strTotalRate, _T(""), _T("%"));
 	m_EdtTotalRate.SetWindowText(strTotalRate);
+}
+
+
+void CRateDlg::InitAcc()
+{
+	CString strAccList = theApp.m_khOpenApi.GetLoginInfo(_T("ACCTLIST_DETAIL"));
+	if (strAccList.IsEmpty())
+		return;
+
+	int nIdx = 0;
+	CString strInfo, strAcc, strName, strGubun, strRe;
+	CString strTemp(strAccList);
+
+	while (TRUE)
+	{
+		nIdx = strTemp.Find(_T(';'));
+		if (nIdx < 0)
+			break;
+
+		strInfo = strTemp.Left(nIdx);
+		strTemp = strTemp.Mid(nIdx + 1);
+
+		nIdx = strInfo.Find(_T(','));
+		if (nIdx < 0)
+			continue;
+		strAcc = strInfo.Left(nIdx);
+		strInfo = strInfo.Mid(nIdx + 1);
+		nIdx = strInfo.Find(_T(','));
+		if (nIdx < 0)
+			continue;
+		strName = strInfo.Left(nIdx);
+		strInfo = strInfo.Mid(nIdx + 1);
+		strGubun = strInfo;
+		strGubun.Trim();
+
+		if (strAcc.Right(2) == _T("11"))
+		{
+			((CStatic*)GetDlgItem(IDC_EDT_ACC))->SetWindowText(strAcc);
+			break;
+		}
+	}
+
+	//((CEdit*)GetDlgItem(IDC_EDT_QUANTITY))->SetWindowText(_T("10"));
+	//((CEdit*)GetDlgItem(IDC_EDT_JONGCODE))->SetFocus();
 }
