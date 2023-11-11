@@ -93,4 +93,5 @@ public:
 	
 	
 	
+	afx_msg void OnBnClickedBtnLoadBuymacro();
 };

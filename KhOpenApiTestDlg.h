@@ -11,8 +11,8 @@
 //******************************************************************/
 // KhOpenApiTestDlg.h : 헤더 파일
 //
-
 #pragma once
+
 
 // CKhOpenApiTestDlg 대화 상자
 class CKhOpenApiTestDlg : public CDialogEx
@@ -36,6 +36,10 @@ public:
 	long		m_nRet;
 
 	CWnd *m_pRealAddDlg;
+
+
+
+
 protected:
 	CString m_strServerGubun;
 	// 구현입니다.

@@ -189,6 +189,9 @@ LRESULT CKhOpenApiTestDlg::OnScreenClose(WPARAM wParam, LPARAM lParam)
 	return 0L;
 }
 
+
+
+
 //*******************************************************************/
 //! Function Name : OnBtnCurrentPrice
 //! Function      : 현재가 버튼
@@ -205,6 +208,7 @@ void CKhOpenApiTestDlg::OnBtnCurrentPrice()
 		return;
 	}
 
+
 	CCurrentPriceDlg *pCurrentPriceDlg = new CCurrentPriceDlg(this);
 	pCurrentPriceDlg->m_strScrNo.Format("%04d", m_nScrN0);
 	pCurrentPriceDlg->Create(IDD_CURRENTPRICE_DLG);
@@ -214,6 +218,7 @@ void CKhOpenApiTestDlg::OnBtnCurrentPrice()
 	// 2개이사의 서비스를 조회 시 m_mapScreen에 화면을 등록하기 전에 
 	// 데이터 응답이 먼저 와서 처리가 불가능 하여 여기서 조회 처리 함.
 	pCurrentPriceDlg->SendSearch();		// 조회 처리
+
 }
 
 //*******************************************************************/

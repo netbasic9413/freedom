@@ -6,6 +6,7 @@
 #include "KhOpenApiTest.h"
 #include "AutoTradingConf.h"
 #include "afxdialogex.h"
+#include "shlwapi.h""
 
 
 // CAutoTradingConf dialog
@@ -84,6 +85,7 @@ BEGIN_MESSAGE_MAP(CAutoTradingConf, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_FAST_BUY, &CAutoTradingConf::OnBnClickedCheckFastBuy)
 	ON_BN_CLICKED(IDC_CHECK_EVENT_MAX_PROFIT_RATIO, &CAutoTradingConf::OnBnClickedCheckEventMaxProfitRatio)
 	ON_BN_CLICKED(IDC_CHECK_AT_ONCE_SEL_TIME, &CAutoTradingConf::OnBnClickedCheckAtOnceSelTime)
+	ON_BN_CLICKED(IDC_BTN_LOAD_BUYMACRO, &CAutoTradingConf::OnBnClickedBtnLoadBuymacro)
 END_MESSAGE_MAP()
 
 
@@ -201,26 +203,43 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 	str.Format(_T("%d"), nGetChkBuyMacro);
 	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "check_buy_macro", (LPCSTR)str, strFileName);
 
-
-	//자동매수조건설정_매수조건식(시작시간)
-	((CEdit*)GetDlgItem(IDC_EDIT_BUY_MACRO_TIME_START))->GetWindowText(str);
-	if (str.GetLength() <= 0)
+	if (nGetChkBuyMacro)
 	{
-		AfxMessageBox("매수조건식 시작 시간을 입력 해 주세요.");
+		//자동매수조건설정_매수조건식(시작시간)
+		((CEdit*)GetDlgItem(IDC_EDIT_BUY_MACRO_TIME_START))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("매수조건식 시작 시간을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_start", (LPCSTR)str, strFileName);
+
+
+		//자동매수조건설정_매수조건식(끝시간)
+		((CEdit*)GetDlgItem(IDC_EDIT_BUY_MACRO_TIME_END))->GetWindowText(str);
+		if (str.GetLength() <= 0)
+		{
+			AfxMessageBox("매수조건식 끝 시간을 입력 해 주세요.");
+			return;
+		}
+		::WritePrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_end", (LPCSTR)str, strFileName);
+	}
+
+	//buy_macro combo
+	CString strGet;
+	int nGetCurSel = m_comboBuyMacro.GetCurSel();
+	if (nGetCurSel == -1)
+		return;
+	m_comboBuyMacro.GetLBText(nGetCurSel, strGet);
+	if (strGet.GetLength() <= 0)
+	{
+		AfxMessageBox("매수조건식을 선택 해 주세요.");
 		return;
 	}
-	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_start", (LPCSTR)str, strFileName);
+	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_combo", (LPCSTR)strGet, strFileName);
 
 
-	//자동매수조건설정_매수조건식(끝시간)
-	((CEdit*)GetDlgItem(IDC_EDIT_BUY_MACRO_TIME_END))->GetWindowText(str);
-	if (str.GetLength() <= 0)
-	{
-		AfxMessageBox("매수조건식 끝 시간을 입력 해 주세요.");
-		return;
-	}
-	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_end", (LPCSTR)str, strFileName);
-
+	/*
 	//자동매수조건설정_매도조건식(체크)
 	int nGetChkSelMacro = m_checkSelMacro.GetCheck();
 	str.Format(_T("%d"), nGetChkSelMacro);
@@ -243,11 +262,13 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 		}
 		::WritePrivateProfileString("AUTO_BUY_COND_CONF", "exe_ownevent_min_time", (LPCSTR)str, strFileName);
 	}
+	*/
+
 
 	//자동매수조건설정_시간일괄청산설정(체크)
 	int nGetChkAtOnceSelTime = m_checkAtOnceSelTime.GetCheck();
 	str.Format(_T("%d"), nGetChkAtOnceSelTime);
-	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "check_atonce_seltime", (LPCSTR)str, strFileName);
+	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "check_atonce_selltime", (LPCSTR)str, strFileName);
 
 
 	//자동매수조건설정_시간일괄청산설정(시간)
@@ -259,7 +280,7 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 			AfxMessageBox("시간일괄청산설정 시간을 입력 해 주세요.");
 			return;
 		}
-		::WritePrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_end", (LPCSTR)str, strFileName);
+		::WritePrivateProfileString("AUTO_BUY_COND_CONF", "atonce_selltime", (LPCSTR)str, strFileName);
 	}
 
 
@@ -277,7 +298,7 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 			AfxMessageBox("익절률을 입력 해 주세요.");
 			return;
 		}
-		::WritePrivateProfileString("ALL_SEL_CONF", "allsel_profitratio", (LPCSTR)str, strFileName);
+		::WritePrivateProfileString("ALL_SEL_CONF", "allsell_profitratio", (LPCSTR)str, strFileName);
 	}
 
 	//전체청산방식_손절률 IDC_CHECK_LOSS_RATIO
@@ -309,7 +330,7 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 			AfxMessageBox("익절금액을 입력 해 주세요.");
 			return;
 		}
-		::WritePrivateProfileString("ALL_SEL_CONF", "allsel_profitamount", (LPCSTR)str, strFileName);
+		::WritePrivateProfileString("ALL_SEL_CONF", "allsell_profitamount", (LPCSTR)str, strFileName);
 	}
 
 
@@ -326,7 +347,7 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 			AfxMessageBox("손절금액을 입력 해 주세요.");
 			return;
 		}
-		::WritePrivateProfileString("ALL_SEL_CONF", "allsel_profitamount", (LPCSTR)str, strFileName);
+		::WritePrivateProfileString("ALL_SEL_CONF", "allsell_lossamount", (LPCSTR)str, strFileName);
 	}
 
 
@@ -424,7 +445,7 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 			AfxMessageBox("미체결 매수주문취소에 대한 초를 입력 해 주세요.");
 			return;
 		}
-		::WritePrivateProfileString("EVENT_CONF", "event_maxloss", (LPCSTR)str, strFileName);
+		::WritePrivateProfileString("ETC_CONF", "cancel_buy_outstandingorder_sec", (LPCSTR)str, strFileName);
 	}
 
 
@@ -463,11 +484,15 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 		return;
 	}
 
+	TCHAR szTmp[200];
+	memset(szTmp, 0, 200);
 	CString strFileName = dlg.GetFileName();
+	StrCpy(szTmp, strFileName);
+	PathRemoveExtension(szTmp);
 	char szItem[80];
 	int nSize = sizeof(szItem);
 	memset(szItem, 0, nSize);
-	SetDlgItemText(IDC_EDIT_TRADING_STRATEGY, strFileName);
+	SetDlgItemText(IDC_EDIT_TRADING_STRATEGY, szTmp);
 
 
 	//시작시 자동매매
@@ -510,7 +535,7 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	//매수조건식 (check)
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_buy_macro", "0", szItem, nSize, strPathName);
-	m_checkAutoExe.SetCheck(atoi(szItem));
+	m_checkBuyMacro.SetCheck(atoi(szItem));
 	//매수조건식 (시간)
 	//start
 	memset(szItem, 0, nSize);
@@ -521,6 +546,14 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_end", "", szItem, nSize, strPathName);
 	SetDlgItemText(IDC_EDIT_BUY_MACRO_TIME_END, LPCTSTR(szItem));
 
+	//m_comboBuyMacro
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_combo", "", szItem, nSize, strPathName);
+	m_comboBuyMacro.AddString(szItem);
+	m_comboBuyMacro.SetCurSel(0);
+	//SetDlgItemText(IDC_EDIT_BUY_MACRO_TIME_END, LPCTSTR(szItem));
+
+	/*
 	//매도조건식 (check)
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_sel_macro", "0", szItem, nSize, strPathName);
@@ -530,6 +563,8 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_exe_ownevent", "0", szItem, nSize, strPathName);
 	m_checkAutoExe.SetCheck(atoi(szItem));
+	*/
+	
 	//보유종목 대상 실행 (시간)
 	/*
 	memset(szItem, 0, nSize);
@@ -541,15 +576,14 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 
 	//시간일괄청산 설정 (check)
 	memset(szItem, 0, nSize);
-	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_atonce_seltime", "0", szItem, nSize, strPathName);
-	m_checkAutoExe.SetCheck(atoi(szItem));
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_atonce_selltime", "0", szItem, nSize, strPathName);
+	m_checkAtOnceSelTime.SetCheck(atoi(szItem));
 
 	//시간일괄청산 설정 (시간)
-	/*
 	memset(szItem, 0, nSize);
-	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_exe_ownevent", "0", szItem, nSize, strPathName);
-	m_checkAutoExe.SetCheck(atoi(szItem));
-	*/
+	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "atonce_selltime", "0", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_AT_ONCE_TIME, LPCTSTR(szItem));
+
 	
 
 	//전체청산방식
@@ -559,7 +593,7 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	m_checkAllSelProfitRatio.SetCheck(atoi(szItem));
 	//익절률 (%)
 	memset(szItem, 0, nSize);
-	::GetPrivateProfileString("ALL_SEL_CONF", "allsel_profitratio", "0", szItem, nSize, strPathName);
+	::GetPrivateProfileString("ALL_SEL_CONF", "allsell_profitratio", "0", szItem, nSize, strPathName);
 	SetDlgItemText(IDC_EDIT_PROFIT_RATIO, LPCTSTR(szItem));
 	//손절률 (check)
 	memset(szItem, 0, nSize);
@@ -572,27 +606,29 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	//익절금액(check)
 	memset(szItem, 0, nSize);
 	BOOL bCheck = FALSE;
-	bCheck = atoi(szItem);
 	::GetPrivateProfileString("ALL_SEL_CONF", "check_allsell_profitamount", "0", szItem, nSize, strPathName);
+	bCheck = atoi(szItem);
 	m_checkAllSellProfitAmount.SetCheck(bCheck);
 	//익절금액
 	if (bCheck)
 	{
-		//memset(szItem, 0, nSize);
-		//::GetPrivateProfileString("ALL_SEL_CONF", "allsel_profitratio", "0", szItem, nSize, strPathName);
-		//SetDlgItemText(IDC_EDIT_PROFIT_RATIO, LPCTSTR(szItem));
+		memset(szItem, 0, nSize);
+		::GetPrivateProfileString("ALL_SEL_CONF", "allsell_profitamount", "0", szItem, nSize, strPathName);
+		SetDlgItemText(IDC_EDIT_PROFIT_AMOUNT, LPCTSTR(szItem));
 	}
 
 	//손절금액(check)
 	bCheck = FALSE;
 	memset(szItem, 0, nSize);
-	::GetPrivateProfileString("ALL_SEL_CONF", "check_allsell_profitamount", "0", szItem, nSize, strPathName);
+	::GetPrivateProfileString("ALL_SEL_CONF", "check_allsell_lossamount", "0", szItem, nSize, strPathName);
+	bCheck = atoi(szItem);
 	m_checkAllSellLossAmount.SetCheck(atoi(szItem));
 	//손절금액
 	if (bCheck)
 	{
-
-
+		memset(szItem, 0, nSize);
+		::GetPrivateProfileString("ALL_SEL_CONF", "allsell_lossamount", "0", szItem, nSize, strPathName);
+		SetDlgItemText(IDC_EDIT_LOSS_AMOUNT, LPCTSTR(szItem));
 	}
 
 	//종목청산방식
@@ -634,17 +670,17 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	//ETC_CONF
 	//미체결 매수주문취소
 	memset(szItem, 0, nSize);
-	::GetPrivateProfileString("EVENT_CONF", "check_cancel_buy_outstandingorder", "0", szItem, nSize, strPathName);
+	::GetPrivateProfileString("ETC_CONF", "check_cancel_buy_outstandingorder", "0", szItem, nSize, strPathName);
 	m_checkCancelBuyOutStandingOrder.SetCheck(atoi(szItem));
 
 	//미체결 매수주문취소 (초)
-	//memset(szItem, 0, nSize);
-	//::GetPrivateProfileString("EVENT_CONF", "event_maxloss", "0", szItem, nSize, strPathName);
-	//SetDlgItemText(IDC_EDIT_MAX_LOSS_RATIO, LPCTSTR(szItem));
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("ETC_CONF", "cancel_buy_outstandingorder_sec", "0", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_CANCEL_BUY_OUTSTANDING_ORDER, LPCTSTR(szItem));
 
 	//번개 매수(빠른 매수 실행)
 	memset(szItem, 0, nSize);
-	::GetPrivateProfileString("EVENT_CONF", "check_fastbuy", "0", szItem, nSize, strPathName);
+	::GetPrivateProfileString("ETC_CONF", "check_fastbuy", "0", szItem, nSize, strPathName);
 	m_checkFastBuy.SetCheck(atoi(szItem));
 
 }
@@ -836,4 +872,41 @@ void CAutoTradingConf::OnBnClickedCheckEventMaxProfitRatio()
 void CAutoTradingConf::OnBnClickedCheckAtOnceSelTime()
 {
 	// TODO: Add your control notification handler code here
+}
+
+
+void CAutoTradingConf::OnBnClickedBtnLoadBuymacro()
+{
+	int i = 0;
+	CString strCondition, strConditionName, strIndex;
+
+	long lRet = theApp.m_khOpenApi.GetConditionLoad();
+
+	if (lRet > 0)
+	{
+		CString strConditionNameList = theApp.m_khOpenApi.GetConditionNameList();
+
+
+		if (strConditionNameList.GetLength() > 0)
+		{
+			m_comboBuyMacro.ResetContent();
+		}
+
+		while (AfxExtractSubString(strCondition, strConditionNameList, i++, _T(';')))
+		{
+			if (strCondition.IsEmpty())
+				continue;
+
+			AfxExtractSubString(strIndex, strCondition, 0, _T('^'));// 고유번호
+			AfxExtractSubString(strConditionName, strCondition, 1, _T('^'));// 조건식 이름
+
+
+			m_comboBuyMacro.AddString(strCondition);
+		}
+
+		m_comboBuyMacro.SetCurSel(0);
+
+	}
+
+	
 }
