@@ -104,6 +104,20 @@ BOOL CKhOpenApiTestApp::InitInstance()
 		::CreateDirectory(strFileName, NULL);
 	}
 
+
+	//CString strFileName = m_sAppPath + "/data/" + strTradingStrategy + ".ini";
+
+	m_pLog = NULL;
+	m_pLog = CLog::Instance();
+
+	m_pLog->SetAutoDirectory(TRUE);
+	m_pLog->SetAutoDirectoryName(m_sAppPath + "log");
+
+	//! 로그 앞 시간 표시!
+	m_pLog->EnableTimestamp(TRUE);
+
+	m_pLog->Log("프로그램 시작");
+
 	CKhOpenApiTestDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();

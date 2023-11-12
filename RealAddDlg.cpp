@@ -229,6 +229,11 @@ void CRealAddDlg::OnReceiveRealDataKhopenapictrl(LPCTSTR sJongmokCode, LPCTSTR s
 		arrData.Add(strData);
 	}
 	SetDataRealAddGrid(arrData, sRealType);
+
+	//andy - 자동매매 
+	//int nType - 1 : 매수, 2: 매도
+	AutoBuySell(1, arrData);
+
 }
 
 void CRealAddDlg::OnReceiveRealCondition(LPCTSTR strCode, LPCTSTR strType, LPCTSTR strConditionName, LPCTSTR strConditionIndex)
@@ -322,6 +327,10 @@ void CRealAddDlg::OnReceiveTrCondition(LPCTSTR sScrNo,PCTSTR strCodeList, LPCTST
 	CString strCndName, sConditionName;
 	m_cmbCon.GetLBText(m_cmbCon.GetCurSel(), strCndName);	//선택된 조건명
 
+	CString strLog;
+	strLog.Format("선택된 조건명 : %s", strCndName);
+	theApp.m_pLog->Log(strLog);
+
 	if (strConditionName == GetConditionName(strCndName))	// 선택한 조건명과 수신한 조건명이 같을때만 처리.
 	{
 		if (strCodeList != _T(""))
@@ -359,7 +368,11 @@ void CRealAddDlg::OnReceiveTrCondition(LPCTSTR sScrNo,PCTSTR strCodeList, LPCTST
 				m_grdRealAdd.SetItemText(nIndex, 1, strCodeName);
 
 				strIndex.Format("%d", nIndex);
-				m_mapJongCode.SetAt(strConditionCode, strIndex);			
+				m_mapJongCode.SetAt(strConditionCode, strIndex);	
+
+				CString strLog;
+				strLog.Format("[조건 검색] 종목코드 : %s, 종목명 : %s", strConditionCode, strCodeName);
+				theApp.m_pLog->Log(strLog);
 			}
 		}
 	}
@@ -538,6 +551,9 @@ void CRealAddDlg::OnBnClickedBtnSendcond()
 	long lRet = theApp.m_khOpenApi.SendCondition(m_strScrNo, GetConditionName(m_strConditionName), m_nConditionIndex, 0);
 	if (lRet == 0)
 	{//에러
+		CString strLog;
+		strLog.Format("조건검색에 실패하였습니다. lRet = %l", lRet);
+		theApp.m_pLog->Log(strLog);
 		return;
 	}
 }
@@ -565,6 +581,8 @@ void CRealAddDlg::OnBnClickedButton1()
 	{//에러
 		return;
 	}
+
+	theApp.m_pLog->Log("실시간 조건을 검색합니다.");
 
 	/// 종목편입, 이탈 로그 삭제
 	m_listCtl_Insert.ResetContent();
@@ -596,4 +614,9 @@ CString CRealAddDlg::GetConditionName(CString strTotCondition)
 
 
 	return strRet;
+}
+
+void CRealAddDlg::AutoBuySell(int nType, CStringArray &arrData)
+{
+	
 }

@@ -23,6 +23,7 @@
 #include "RealAddDlg.h"
 #include "RateDlg.h"
 #include "AutoTradingConf.h"
+#include "Log.h"
 
 
 #ifdef _DEBUG
@@ -139,6 +140,8 @@ void CKhOpenApiTestDlg::OnDestroy()
 	}
 	m_mapScreen.RemoveAll();
 	m_mapScreenNum.RemoveAll();
+
+	theApp.m_pLog->Log("프로그램을 종료합니다.");
 }
 
 HCURSOR CKhOpenApiTestDlg::OnQueryDragIcon()
@@ -649,16 +652,26 @@ void CKhOpenApiTestDlg::OnEventConnect(LONG nItemCnt)
 	{
 		CString strMsg;
 		m_strServerGubun = theApp.m_khOpenApi.GetLoginInfo(_T("GetServerGubun"));
-		if(m_strServerGubun.CompareNoCase(_T("1")) == 0)/// 모의투자 접속
+		if (m_strServerGubun.CompareNoCase(_T("1")) == 0)/// 모의투자 접속
+		{
 			strMsg = _T("모의투자 접속");
+			theApp.m_pLog->Log("모의투자 접속");
+		}
 		else
+		{
 			strMsg = _T("실서버 접속");
+			theApp.m_pLog->Log("실서버 접속");
+		}
+			
 		SetDlgItemText(IDC_ST_SERVER, strMsg);
 	}
 	else
 	{
 		// 접속 비정상 처리
 		EndDialog(IDCANCEL);
+		CString strLog;
+		strLog.Format("서버접속 비정상 처리 : %d", nItemCnt);
+		theApp.m_pLog->Log(strLog);
 	}
 }
 

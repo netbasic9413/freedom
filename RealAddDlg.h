@@ -74,4 +74,5 @@ public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedBtnSendcond();
+	void AutoBuySell(int nType, CStringArray &arrData);
 };

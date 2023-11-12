@@ -119,6 +119,7 @@
     <ClInclude Include="KhOpenApiTest.h" />
     <ClInclude Include="KhOpenApiTestDlg.h" />
     <ClInclude Include="KwanSimDlg.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="OrderDlg.h" />
     <ClInclude Include="RateDlg.h" />
     <ClInclude Include="RealAddDlg.h" />
@@ -139,6 +140,7 @@
     <ClCompile Include="KhOpenApiTest.cpp" />
     <ClCompile Include="KhOpenApiTestDlg.cpp" />
     <ClCompile Include="KwanSimDlg.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="OrderDlg.cpp" />
     <ClCompile Include="RateDlg.cpp" />
     <ClCompile Include="RealAddDlg.cpp" />

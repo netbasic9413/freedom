@@ -22,6 +22,8 @@
 #include "KHOpenAPICtrl.h"
 #include "GridCtrl\GridCtrl.h"
 
+#include "Log.h"
+
 #define OP_ERR_SISE_OVERFLOW	-200			//"시세조회 과부하"
 #define OP_ERR_RQ_STRUCT_FAIL	-201			//"REQUEST_INPUT_st Failed"
 #define OP_ERR_RQ_STRING_FAIL	-202			//"요청 전문 작성 실패"
@@ -80,6 +82,9 @@ public:
 public:
 	//CKhopenapictrl1 m_khOpenApi;
 	CKHOpenAPI	m_khOpenApi;
+
+	CLog* m_pLog;
+
 
 // 재정의입니다.
 public:
