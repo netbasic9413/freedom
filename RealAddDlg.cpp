@@ -232,7 +232,7 @@ void CRealAddDlg::OnReceiveRealDataKhopenapictrl(LPCTSTR sJongmokCode, LPCTSTR s
 
 	//andy - 자동매매 
 	//int nType - 1 : 매수, 2: 매도
-	AutoBuySell(1, arrData);
+	AutoBuySell(sJongmokCode, 1, arrData);
 
 }
 
@@ -616,7 +616,22 @@ CString CRealAddDlg::GetConditionName(CString strTotCondition)
 	return strRet;
 }
 
-void CRealAddDlg::AutoBuySell(int nType, CStringArray &arrData)
+void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arrData)
 {
-	
+	// 종목코드에 맞는 행 찾기
+	CString strData = arrData.GetAt(0), strTemp;
+	if (m_mapJongCode.Lookup(strData, strTemp) == FALSE)
+	{
+		return;
+	}
+
+	//등락률
+	CString strHighLowRate = arrData.GetAt(5);
+	//거래량
+	CString strVolume = arrData.GetAt(6);
+
+	//비교 자동 매수
+
+
+
 }

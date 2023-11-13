@@ -14,6 +14,17 @@
 #pragma once
 
 
+#include "RealAddDlg.h"
+#include "RateDlg.h"
+#include "AutoTradingConf.h"
+#include "CurrentPriceDlg.h"
+#include "OrderDlg.h"
+#include "KwanSimDlg.h"
+
+
+
+
+
 // CKhOpenApiTestDlg 대화 상자
 class CKhOpenApiTestDlg : public CDialogEx
 {
@@ -35,7 +46,16 @@ public:
 	BOOL GetNextScreenNum(int nScreenType);
 	long		m_nRet;
 
-	CWnd *m_pRealAddDlg;
+	//CWnd *m_pRealAddDlg;
+
+	CRealAddDlg* m_pRealAddDlg;
+	CRateDlg* m_pRateDlg;
+	CAutoTradingConf* m_pAutoTradingConf;
+	//CCurrentPriceDlg* m_pCurrentPriceDlg;
+	
+	COrderDlg* m_pOrderDlg;
+	CKwanSimDlg* m_pKwanSimDlg;
+	
 
 
 

@@ -19,3 +19,4 @@ Debug/KhOpenApiTest.vcxproj.FileListAbsolute.txt
 *.lock
 KhOpenApiTest.aps
 Debuglog/20231112.log
+*.log

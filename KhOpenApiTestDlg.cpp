@@ -93,7 +93,18 @@ BOOL CKhOpenApiTestDlg::OnInitDialog()
 	strTitle += SAMPLE_VERSION;
 	SetWindowText(strTitle);
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+
+
+	m_pRealAddDlg = NULL;
+	m_pRateDlg = NULL;
+	m_pAutoTradingConf = NULL;
+	//m_pCurrentPriceDlg = NULL;
+	m_pOrderDlg = NULL;
+	m_pKwanSimDlg = NULL;
+
 	
+	
+
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -140,6 +151,15 @@ void CKhOpenApiTestDlg::OnDestroy()
 	}
 	m_mapScreen.RemoveAll();
 	m_mapScreenNum.RemoveAll();
+
+
+	/*
+	if (m_pRealAddDlg != NULL)
+	{
+		m_pRealAddDlg->DestroyWindow();
+		delete m_pRealAddDlg;
+	}
+	*/
 
 	theApp.m_pLog->Log("프로그램을 종료합니다.");
 }
@@ -740,11 +760,24 @@ void CKhOpenApiTestDlg::OnBnClickedBtnReal()
 
 	if (m_nRet > 0)
 	{
+		if (m_pRealAddDlg == NULL)
+		{
+			m_pRealAddDlg = new CRealAddDlg(this);
+			m_pRealAddDlg->m_strScrNo.Format(_T("%04d"), m_nScrN0);
+			m_pRealAddDlg->Create(IDD_CON_SET);
+
+			m_mapScreen.SetAt(m_pRealAddDlg->m_strScrNo, m_pRealAddDlg);
+		}
+		
+	
+		/*
 		CRealAddDlg *pRealAddDlg = new CRealAddDlg(this);
 		pRealAddDlg->m_strScrNo.Format(_T("%04d"), m_nScrN0);
 		pRealAddDlg->Create(IDD_CON_SET);
 
 		m_mapScreen.SetAt(pRealAddDlg->m_strScrNo, pRealAddDlg);
+		*/
+		
 	}
 }
 
@@ -755,6 +788,18 @@ void CKhOpenApiTestDlg::OnBnClickedButton1()
 		return;
 	}
 
+	if (m_pRateDlg == NULL)
+	{
+		m_pRateDlg = new CRateDlg(this, m_strServerGubun);
+		ASSERT(m_pRateDlg != nullptr);
+
+		m_pRateDlg->m_strScrNo.Format(_T("%04d"), m_nScrN0);
+		m_pRateDlg->Create(IDD_RATE);
+
+		m_mapScreen.SetAt(m_pRateDlg->m_strScrNo, m_pRateDlg);
+	}
+
+	/*
 	CRateDlg *pRateDlg = new CRateDlg(this, m_strServerGubun);
 	ASSERT(pRateDlg != nullptr);
 
@@ -762,6 +807,8 @@ void CKhOpenApiTestDlg::OnBnClickedButton1()
 	pRateDlg->Create(IDD_RATE);
 
 	m_mapScreen.SetAt(pRateDlg->m_strScrNo, pRateDlg);
+	*/
+	
 }
 
 void CKhOpenApiTestDlg::OnBntLOGIN()
