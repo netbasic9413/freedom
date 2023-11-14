@@ -20,6 +20,7 @@
 #include "CurrentPriceDlg.h"
 #include "OrderDlg.h"
 #include "KwanSimDlg.h"
+#include "StatusDlg.h"
 
 
 
@@ -51,12 +52,12 @@ public:
 	CRealAddDlg* m_pRealAddDlg;
 	CRateDlg* m_pRateDlg;
 	CAutoTradingConf* m_pAutoTradingConf;
-	//CCurrentPriceDlg* m_pCurrentPriceDlg;
-	
 	COrderDlg* m_pOrderDlg;
 	CKwanSimDlg* m_pKwanSimDlg;
-	
+	CCurrentPriceDlg* m_pCurrentPriceDlg;
+	CStatusDlg* m_pStatusDlg;
 
+	BOOL m_bAutoBuySell;
 
 
 
@@ -92,4 +93,6 @@ public:
 	afx_msg void OnBntLOGIN();
 	afx_msg void OnBnClickedCancel();
 	afx_msg void OnBnClickedBtnAutoConfig();
+	afx_msg void OnBnClickedBtnStartAutoRun();
+	afx_msg void OnBnClickedBtnStopAutoRun();
 };

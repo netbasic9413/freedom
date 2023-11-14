@@ -84,4 +84,7 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg void OnBtnSearch();
 	DECLARE_MESSAGE_MAP()
+	virtual void OnCancel();
+	virtual void OnOK();
+	virtual void PostNcDestroy();
 };

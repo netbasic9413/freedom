@@ -610,3 +610,26 @@ void CKwanSimDlg::SetDataKwanSimGrid(CStringArray &arrData, CString strRealType/
 	}
 	m_grdKwanSim.Invalidate();
 }
+
+void CKwanSimDlg::OnCancel()
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	CDialogEx::OnCancel();
+}
+
+
+void CKwanSimDlg::OnOK()
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	CDialogEx::OnOK();
+}
+
+
+void CKwanSimDlg::PostNcDestroy()
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	CDialogEx::PostNcDestroy();
+}

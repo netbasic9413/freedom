@@ -64,4 +64,7 @@ public:
 	afx_msg void OnSelchangeComLoanTP();
 	afx_msg void OnBnClickedQryLoanDate();
 	afx_msg void OnBnClickedBtnClear();
+	virtual void OnCancel();
+	virtual void OnOK();
+	virtual void PostNcDestroy();
 };

@@ -94,4 +94,8 @@ public:
 	
 	
 	afx_msg void OnBnClickedBtnLoadBuymacro();
+	afx_msg void OnBnClickedCancel();
+	virtual void PostNcDestroy();
+	virtual void OnCancel();
+	virtual void OnOK();
 };

@@ -63,6 +63,8 @@ BEGIN_MESSAGE_MAP(CKhOpenApiTestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_LOGIN, &CKhOpenApiTestDlg::OnBntLOGIN)
 	ON_BN_CLICKED(IDCANCEL, &CKhOpenApiTestDlg::OnBnClickedCancel)
 	ON_BN_CLICKED(IDC_BTN_AUTO_CONFIG, &CKhOpenApiTestDlg::OnBnClickedBtnAutoConfig)
+	ON_BN_CLICKED(IDC_BTN_START_AUTO_RUN, &CKhOpenApiTestDlg::OnBnClickedBtnStartAutoRun)
+	ON_BN_CLICKED(IDC_BTN_STOP_AUTO_RUN, &CKhOpenApiTestDlg::OnBnClickedBtnStopAutoRun)
 END_MESSAGE_MAP()
 
 //*******************************************************************/
@@ -98,11 +100,13 @@ BOOL CKhOpenApiTestDlg::OnInitDialog()
 	m_pRealAddDlg = NULL;
 	m_pRateDlg = NULL;
 	m_pAutoTradingConf = NULL;
-	//m_pCurrentPriceDlg = NULL;
+	m_pCurrentPriceDlg = NULL;
 	m_pOrderDlg = NULL;
 	m_pKwanSimDlg = NULL;
+	m_pStatusDlg = NULL;
 
-	
+	m_bAutoBuySell = FALSE;
+
 	
 
 
@@ -231,7 +235,7 @@ void CKhOpenApiTestDlg::OnBtnCurrentPrice()
 		return;
 	}
 
-
+	/*
 	CCurrentPriceDlg *pCurrentPriceDlg = new CCurrentPriceDlg(this);
 	pCurrentPriceDlg->m_strScrNo.Format("%04d", m_nScrN0);
 	pCurrentPriceDlg->Create(IDD_CURRENTPRICE_DLG);
@@ -241,6 +245,23 @@ void CKhOpenApiTestDlg::OnBtnCurrentPrice()
 	// 2개이사의 서비스를 조회 시 m_mapScreen에 화면을 등록하기 전에 
 	// 데이터 응답이 먼저 와서 처리가 불가능 하여 여기서 조회 처리 함.
 	pCurrentPriceDlg->SendSearch();		// 조회 처리
+	*/
+
+	if (m_pCurrentPriceDlg == NULL)
+	{
+		m_pCurrentPriceDlg = new CCurrentPriceDlg(this);
+		m_pCurrentPriceDlg->m_strScrNo.Format("%04d", m_nScrN0);
+		m_pCurrentPriceDlg->Create(IDD_CURRENTPRICE_DLG);
+
+		m_mapScreen.SetAt(m_pCurrentPriceDlg->m_strScrNo, m_pCurrentPriceDlg);
+
+		// 2개이사의 서비스를 조회 시 m_mapScreen에 화면을 등록하기 전에 
+		// 데이터 응답이 먼저 와서 처리가 불가능 하여 여기서 조회 처리 함.
+		m_pCurrentPriceDlg->SendSearch();		// 조회 처리
+	}
+	
+	
+	
 
 }
 
@@ -826,9 +847,47 @@ void CKhOpenApiTestDlg::OnBnClickedCancel()
 
 void CKhOpenApiTestDlg::OnBnClickedBtnAutoConfig()
 {
+	/*
 	CAutoTradingConf* pAutoTradingConf = new CAutoTradingConf();
 	pAutoTradingConf->m_strScrNo.Format("%04d", m_nScrN0);
 	pAutoTradingConf->Create(IDD_AUTO_CONF_DLG);
 
 	m_mapScreen.SetAt(pAutoTradingConf->m_strScrNo, pAutoTradingConf);
+	*/
+
+	m_pAutoTradingConf = new CAutoTradingConf();
+	m_pAutoTradingConf->m_strScrNo.Format("%04d", m_nScrN0);
+	m_pAutoTradingConf->Create(IDD_AUTO_CONF_DLG);
+
+	m_mapScreen.SetAt(m_pAutoTradingConf->m_strScrNo, m_pAutoTradingConf);
+}
+
+
+void CKhOpenApiTestDlg::OnBnClickedBtnStartAutoRun()
+{
+	if (m_bAutoBuySell == FALSE)
+	{
+		if (m_pStatusDlg == NULL)
+		{
+			RECT rcPos;
+			::GetWindowRect(this->m_hWnd, &rcPos);
+			//LPRECT lpRect;
+			//GetWindowRect(lpRect);
+			m_pStatusDlg = new CStatusDlg();
+			m_pStatusDlg->Create(IDD_STATUS_DLG);
+			//::SetWindowPos(m_pStatusDlg->m_hWnd, rcPos.left+5, rcPos.top+5, 0, 0, SWP_NOSIZE);
+			SetWindowPos(m_pStatusDlg, rcPos.left, (rcPos.bottom - rcPos.top) + 5 , 0, 0, SWP_NOSIZE);
+			
+			
+		}
+		
+
+
+	}
+}
+
+
+void CKhOpenApiTestDlg::OnBnClickedBtnStopAutoRun()
+{
+	m_bAutoBuySell = TRUE;
 }

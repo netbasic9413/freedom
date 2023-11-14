@@ -573,3 +573,26 @@ void CRateDlg::InitAcc()
 	//((CEdit*)GetDlgItem(IDC_EDT_QUANTITY))->SetWindowText(_T("10"));
 	//((CEdit*)GetDlgItem(IDC_EDT_JONGCODE))->SetFocus();
 }
+
+void CRateDlg::OnCancel()
+{
+	
+	DestroyWindow();
+	//CDialogEx::OnCancel();
+}
+
+
+void CRateDlg::OnOK()
+{
+	
+	DestroyWindow();
+	//CDialogEx::OnOK();
+}
+
+
+void CRateDlg::PostNcDestroy()
+{
+	
+	delete this;
+	CDialogEx::PostNcDestroy();
+}

@@ -628,3 +628,26 @@ void COrderDlg::InitDefault()
 	((CEdit*)GetDlgItem(IDC_EDT_QUANTITY))->SetWindowText(_T("10"));
 	((CEdit*)GetDlgItem(IDC_EDT_JONGCODE))->SetFocus();
 }
+
+void COrderDlg::OnCancel()
+{
+	
+	DestroyWindow();
+	//CDialogEx::OnCancel();
+}
+
+
+void COrderDlg::OnOK()
+{
+	
+	DestroyWindow();
+	//CDialogEx::OnOK();
+}
+
+
+void COrderDlg::PostNcDestroy()
+{
+	
+	delete this;
+	CDialogEx::PostNcDestroy();
+}

@@ -625,6 +625,9 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 		return;
 	}
 
+
+	//현재가
+	CString strCurPrice = arrData.GetAt(2);
 	//등락률
 	CString strHighLowRate = arrData.GetAt(5);
 	//거래량
@@ -634,4 +637,28 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 
 
 
+}
+
+
+void CRealAddDlg::OnCancel()
+{
+	
+	DestroyWindow();
+	//CDialogEx::OnCancel();
+}
+
+
+void CRealAddDlg::OnOK()
+{
+	
+	DestroyWindow();
+	//CDialogEx::OnOK();
+}
+
+
+void CRealAddDlg::PostNcDestroy()
+{
+	
+	delete this;
+	CDialogEx::PostNcDestroy();
 }

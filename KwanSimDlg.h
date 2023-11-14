@@ -61,4 +61,7 @@ protected:
 	afx_msg void OnBtnJongAllDelete();
 	afx_msg void OnBtnSearch();
 	DECLARE_MESSAGE_MAP()
+	virtual void OnCancel();
+	virtual void OnOK();
+	virtual void PostNcDestroy();
 };

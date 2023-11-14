@@ -237,6 +237,7 @@ BEGIN_MESSAGE_MAP(CCurrentPriceDlg, CDialogEx)
 	ON_WM_CLOSE()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BTN_SEARCH,	OnBtnSearch)
+//	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 //*******************************************************************/
@@ -343,6 +344,8 @@ void CCurrentPriceDlg::OnClose()
 		memcpy(cScrNo3, m_strScrNo3, nLen);
 		m_pParent->PostMessage(UM_SCRENN_CLOSE, 0U, (LPARAM)cScrNo3);
 	}
+
+	//DestroyWindow();
 
 	CDialogEx::OnClose();
 }
@@ -1054,3 +1057,37 @@ void CCurrentPriceDlg::SetDataHogaGrid(CStringArray &arrData, CString strRealTyp
 	}
 	m_grdHoga.Invalidate();
 }
+
+
+void CCurrentPriceDlg::OnCancel()
+{
+	
+
+	DestroyWindow();
+
+	//CDialogEx::OnCancel();
+}
+
+
+void CCurrentPriceDlg::OnOK()
+{
+	
+	DestroyWindow();
+	//CDialogEx::OnOK();
+}
+
+
+void CCurrentPriceDlg::PostNcDestroy()
+{
+	
+	delete this;
+	CDialogEx::PostNcDestroy();
+}
+
+
+//void CCurrentPriceDlg::OnDestroy()
+//{
+//	CDialogEx::OnDestroy();
+//
+//	DestroyWindow();
+//}

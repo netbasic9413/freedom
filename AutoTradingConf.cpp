@@ -86,6 +86,7 @@ BEGIN_MESSAGE_MAP(CAutoTradingConf, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_EVENT_MAX_PROFIT_RATIO, &CAutoTradingConf::OnBnClickedCheckEventMaxProfitRatio)
 	ON_BN_CLICKED(IDC_CHECK_AT_ONCE_SEL_TIME, &CAutoTradingConf::OnBnClickedCheckAtOnceSelTime)
 	ON_BN_CLICKED(IDC_BTN_LOAD_BUYMACRO, &CAutoTradingConf::OnBnClickedBtnLoadBuymacro)
+	ON_BN_CLICKED(IDCANCEL, &CAutoTradingConf::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 
@@ -98,8 +99,8 @@ void CAutoTradingConf::OnBnClickedOk()
 	//::WritePrivateProfileString("AUTO_TRADING_CONF", "TRADING_STRATEGY", m_strJongCode, strFileName);
 
 
-
-	CDialogEx::OnOK();
+	DestroyWindow();
+	//CDialogEx::OnOK();
 }
 
 
@@ -909,4 +910,37 @@ void CAutoTradingConf::OnBnClickedBtnLoadBuymacro()
 	}
 
 	
+}
+
+
+void CAutoTradingConf::OnBnClickedCancel()
+{
+
+	DestroyWindow();
+
+	//CDialogEx::OnCancel();
+}
+
+
+void CAutoTradingConf::PostNcDestroy()
+{
+	
+	delete this;
+	CDialogEx::PostNcDestroy();
+}
+
+
+void CAutoTradingConf::OnCancel()
+{
+	
+	DestroyWindow();
+	CDialogEx::OnCancel();
+}
+
+
+void CAutoTradingConf::OnOK()
+{
+	
+	DestroyWindow();
+	CDialogEx::OnOK();
 }

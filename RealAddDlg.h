@@ -75,4 +75,7 @@ public:
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedBtnSendcond();
 	void AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arrData);
+	virtual void OnCancel();
+	virtual void OnOK();
+	virtual void PostNcDestroy();
 };
