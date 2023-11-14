@@ -98,8 +98,19 @@ void CAutoTradingConf::OnBnClickedOk()
 	//CString strFileName = theApp.m_sAppPath + "/data/jongcodedata.ini";
 	//::WritePrivateProfileString("AUTO_TRADING_CONF", "TRADING_STRATEGY", m_strJongCode, strFileName);
 
+	CString strExeMacro = theApp.m_sAppPath + "/data/exe_macro.ini";
+	
 
-	DestroyWindow();
+	//[CONF_FILE_PATH]
+	if (m_strExeMacro.GetLength() <= 0)
+	{
+		AfxMessageBox("자동매매 설정을 먼저 저장 해 주세요.");
+		return;
+	}
+	::WritePrivateProfileString("EXE_MACRO", "file_path", (LPCSTR)m_strExeMacro, strExeMacro);
+
+
+	//DestroyWindow();
 	//CDialogEx::OnOK();
 }
 
@@ -116,7 +127,13 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 		return;
 	}
 
+	//CString strExeMacro = theApp.m_sAppPath + "/data/exe_macro.ini";
 	CString strFileName = theApp.m_sAppPath + "/data/" + strTradingStrategy + ".ini";
+
+	m_strExeMacro = strFileName;
+
+	//[CONF_FILE_PATH]
+	//::WritePrivateProfileString("CONF_FILE_PATH", "file_path", (LPCSTR)strFileName, strExeMacro);
 
 	//시작시자동매매_자동실행
 	int nGetChk = m_checkAutoExe.GetCheck();

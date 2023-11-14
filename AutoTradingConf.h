@@ -15,6 +15,7 @@ public:
 public:
 	CWnd* m_pParent;
 	CString		m_strScrNo;
+	CString		m_strExeMacro;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME

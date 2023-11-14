@@ -22,7 +22,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CListBox m_ListStatus;
-	afx_msg void OnLbnSelchangeListStatus();
+	//afx_msg void OnLbnSelchangeListStatus();
 	virtual void OnOK();
 	virtual void OnCancel();
 	virtual void PostNcDestroy();
