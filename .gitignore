@@ -20,3 +20,4 @@ Debug/KhOpenApiTest.vcxproj.FileListAbsolute.txt
 KhOpenApiTest.aps
 Debuglog/20231112.log
 *.log
+*.pch

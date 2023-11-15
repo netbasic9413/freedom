@@ -630,29 +630,27 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 	CString strCurPrice = arrData.GetAt(2);
 	//등락률
 	CString strHighLowRate = arrData.GetAt(5);
+	int nHighLowRate = atoi(strHighLowRate);
 	//거래량
 	CString strVolume = arrData.GetAt(6);
+	int nVolume = atoi(strVolume);
+
 
 	//비교 자동 매수
-	TCHAR szItem[300];
-	int nSize = sizeof(szItem);
-	memset(szItem, 0, sizeof(szItem));
+	
+	//거래량 비교
+	if (nVolume >= 300000)
+	{
+		//등락률비교
+		if (nHighLowRate >= 1.0)
+		{
+			//현재가 비교
+
+		}
+	}
+	
 
 
-	//exe_macro.ini [EXE_MACRO]
-	CString strExeMacro = theApp.m_sAppPath + "/data/exe_macro.ini";
-	::GetPrivateProfileString("EXE_MACRO", "file_path", "0", szItem, sizeof(szItem), strExeMacro);
-	CString strGetExeMacroPath = szItem;
-
-	//종목별익절
-	//종목익절 (check)
-	memset(szItem, 0, nSize);
-	::GetPrivateProfileString("EVENT_CONF", "check_event_profit", "0", szItem, nSize, strPathName);
-	//m_checkEventProfit.SetCheck(atoi(szItem));
-	//종목익절
-	memset(szItem, 0, nSize);
-	::GetPrivateProfileString("EVENT_CONF", "event_profit", "0", szItem, nSize, strPathName);
-	//SetDlgItemText(IDC_EDIT_EVENT_PROFIT_RATIO, LPCTSTR(szItem));
 
 }
 

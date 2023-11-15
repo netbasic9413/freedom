@@ -98,6 +98,10 @@ void CAutoTradingConf::OnBnClickedOk()
 	//CString strFileName = theApp.m_sAppPath + "/data/jongcodedata.ini";
 	//::WritePrivateProfileString("AUTO_TRADING_CONF", "TRADING_STRATEGY", m_strJongCode, strFileName);
 
+	TCHAR szItem[300];
+	int nSize = sizeof(szItem);
+	memset(szItem, 0, nSize);
+
 	CString strExeMacro = theApp.m_sAppPath + "/data/exe_macro.ini";
 	
 
@@ -108,6 +112,57 @@ void CAutoTradingConf::OnBnClickedOk()
 		return;
 	}
 	::WritePrivateProfileString("EXE_MACRO", "file_path", (LPCSTR)m_strExeMacro, strExeMacro);
+
+
+	
+
+
+	//exe_macro.ini [EXE_MACRO]
+	::GetPrivateProfileString("EXE_MACRO", "file_path", "0", szItem, sizeof(szItem), strExeMacro);
+	CString strGetExeMacroPath = szItem;
+
+
+
+	//종목별익절
+	//종목익절 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "check_event_profit", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventProfitChk = atoi(szItem);
+	//종목익절룰
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "event_profit", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventProfitRate = atoi(szItem);
+
+
+	//최대익절 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "check_event_maxprofit", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventProtfitMaxChk = atoi(szItem);
+	//최대익절 (%)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "event_maxprofit", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventProtfitMaxRate = atoi(szItem);
+
+	//종목손절 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "check_event_loss", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventLossChk = atoi(szItem);
+
+	//종목손절 
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "event_loss", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventLossRate = atoi(szItem);
+
+	//종목최대손절 (check)
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "check_event_maxloss", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventLossMaxChk = atoi(szItem);
+
+	//종목최대손절
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("EVENT_CONF", "event_maxloss", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventLossMaxRate = atoi(szItem);
+
 
 
 	//DestroyWindow();

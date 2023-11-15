@@ -11,6 +11,10 @@ public:
 	CStatusDlg(CWnd* pParent = nullptr);   // standard constructor
 	virtual ~CStatusDlg();
 
+
+public:
+	CString		m_strScrNo;
+
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_STATUS_DLG };

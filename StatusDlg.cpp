@@ -54,7 +54,8 @@ void CStatusDlg::OnCancel()
 
 void CStatusDlg::PostNcDestroy()
 {
-	
+	//::SendMessage(AfxGetMainWnd()->m_hWnd, UM_DELETE_DLG, 0, 6);
+
 	delete this;
 	CDialogEx::PostNcDestroy();
 }

@@ -60,3 +60,11 @@
 #endif
 
 
+
+//User defined message
+#define UM_DELETE_DLG			WM_USER+1
+
+
+
+
+

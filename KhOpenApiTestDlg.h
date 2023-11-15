@@ -95,4 +95,5 @@ public:
 	afx_msg void OnBnClickedBtnAutoConfig();
 	afx_msg void OnBnClickedBtnStartAutoRun();
 	afx_msg void OnBnClickedBtnStopAutoRun();
+	//afx_msg void OnBnDeleteDlg();
 };

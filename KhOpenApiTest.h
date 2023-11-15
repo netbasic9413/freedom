@@ -91,6 +91,30 @@ public:
 	virtual BOOL InitInstance();
 
 public:
+	//자동매매 (~.ini 파일정보)
+	//종목청산방식
+	int m_nEventProfitChk; //익절률 (check)
+	int m_nEventProfitRate; //익절률 (%)
+	int m_nEventProtfitMaxChk; //종목최대익절 (check)
+	int m_nEventProtfitMaxRate; //종목최대익절 (%)
+	int m_nEventLossChk; //종목손절 (check)
+	int m_nEventLossRate; //종목손절 (%)
+	int m_nEventLossMaxChk; //종목최대손절 (check)
+	int m_nEventLossMaxRate; //종목최대손절 (%)
+
+	//자동매수 조건
+	int m_nTotalBuyAmount; //총 매수가능금액
+	int m_nEventBuyAmount; //종목별매수금액
+	int m_nMaxBuyEventCount; //최대매수종목수
+	int m_nBuyMaxValuePerStock; //주당매수최고가
+	int m_nBuyLowValuePerStock; //주당매수최저가
+	int m_nEventlSmallestVolume; //종목최소거래량
+
+
+
+
+
+
 	CString	m_sAppPath;		// 실행 파일 패스
 
 	CString ConvDataFormat(int nType, LPCTSTR szData, LPCTSTR szBeforeData = "", LPCTSTR szAfterData = "");

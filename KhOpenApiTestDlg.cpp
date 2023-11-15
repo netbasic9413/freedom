@@ -65,6 +65,7 @@ BEGIN_MESSAGE_MAP(CKhOpenApiTestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_AUTO_CONFIG, &CKhOpenApiTestDlg::OnBnClickedBtnAutoConfig)
 	ON_BN_CLICKED(IDC_BTN_START_AUTO_RUN, &CKhOpenApiTestDlg::OnBnClickedBtnStartAutoRun)
 	ON_BN_CLICKED(IDC_BTN_STOP_AUTO_RUN, &CKhOpenApiTestDlg::OnBnClickedBtnStopAutoRun)
+	//ON_MESSAGE(UM_DELETE_DLG, &CKhOpenApiTestDlg::OnBnDeleteDlg)
 END_MESSAGE_MAP()
 
 //*******************************************************************/
@@ -80,6 +81,15 @@ BEGIN_EVENTSINK_MAP(CKhOpenApiTestDlg, CDialogEx)
 	ON_EVENT(CKhOpenApiTestDlg, IDC_KHOPENAPICTRL1, 8, OnReceiveTrCondition,			VTS_BSTR VTS_BSTR VTS_BSTR VTS_I2 VTS_I2)
 	ON_EVENT(CKhOpenApiTestDlg, IDC_KHOPENAPICTRL1, 9, OnReceiveConditionVer,			VTS_I4 VTS_BSTR)
 END_EVENTSINK_MAP()
+
+/*
+void CKhOpenApiTestDlg::OnBnDeleteDlg()
+{
+
+}
+*/
+
+
 
 BOOL CKhOpenApiTestDlg::OnInitDialog()
 {
@@ -847,6 +857,10 @@ void CKhOpenApiTestDlg::OnBnClickedCancel()
 
 void CKhOpenApiTestDlg::OnBnClickedBtnAutoConfig()
 {
+	if (!GetNextScreenNum(5))
+	{
+		return;
+	}
 	/*
 	CAutoTradingConf* pAutoTradingConf = new CAutoTradingConf();
 	pAutoTradingConf->m_strScrNo.Format("%04d", m_nScrN0);
@@ -865,16 +879,22 @@ void CKhOpenApiTestDlg::OnBnClickedBtnAutoConfig()
 
 void CKhOpenApiTestDlg::OnBnClickedBtnStartAutoRun()
 {
+	if (!GetNextScreenNum(6))
+	{
+		return;
+	}
+
 	if (m_bAutoBuySell == FALSE)
 	{
-		if (m_pStatusDlg == NULL)
+		if (m_pStatusDlg==NULL)
 		{
 			RECT rcPos;
-			::GetWindowRect(this->m_hWnd, &rcPos);
+			::GetWindowRect(AfxGetMainWnd()->m_hWnd, &rcPos);
 			//LPRECT lpRect;
 			//GetWindowRect(lpRect);
 			m_pStatusDlg = new CStatusDlg();
 			m_pStatusDlg->Create(IDD_STATUS_DLG);
+			m_mapScreen.SetAt(m_pStatusDlg->m_strScrNo, m_pStatusDlg);
 			//::SetWindowPos(m_pStatusDlg->m_hWnd, rcPos.left+5, rcPos.top+5, 0, 0, SWP_NOSIZE);
 			SetWindowPos(m_pStatusDlg, rcPos.left, (rcPos.bottom - rcPos.top) + 5 , 0, 0, SWP_NOSIZE);
 			
