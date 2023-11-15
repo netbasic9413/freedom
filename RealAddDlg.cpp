@@ -131,7 +131,7 @@ void CRealAddDlg::OnClose()
 		char *cScrNo = new char[nLen + 1];
 		memset(cScrNo, 0x00, nLen + 1);
 		memcpy(cScrNo, m_strScrNo, nLen);
-		m_pParent->PostMessage(UM_SCRENN_CLOSE, 0U, (LPARAM)cScrNo);
+		m_pParent->PostMessage(UM_SCRENN_CLOSE, 3U, (LPARAM)cScrNo);
 	}
 
 	CDialogEx::OnClose();
@@ -396,7 +396,7 @@ void CRealAddDlg::OnReceiveConditionVer(long lRet, LPCTSTR sMsg)
 	//받아온 조건검색명을 콤보에 넣는다.
 	m_cmbCon.ResetContent();
 
-	int i(0);
+	int i=0;
 
 	while( AfxExtractSubString( strCondition, strConditionNameList, i++, _T(';')) )
 	{
@@ -658,22 +658,22 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 void CRealAddDlg::OnCancel()
 {
 	
-	DestroyWindow();
-	//CDialogEx::OnCancel();
+	//DestroyWindow();
+	CDialogEx::OnCancel();
 }
 
 
 void CRealAddDlg::OnOK()
 {
 	
-	DestroyWindow();
-	//CDialogEx::OnOK();
+	//DestroyWindow();
+	CDialogEx::OnOK();
 }
 
 
 void CRealAddDlg::PostNcDestroy()
 {
 	
-	delete this;
-	CDialogEx::PostNcDestroy();
+	//delete this;
+	//CDialogEx::PostNcDestroy();
 }

@@ -16,7 +16,7 @@ IMPLEMENT_DYNAMIC(CAutoTradingConf, CDialogEx)
 CAutoTradingConf::CAutoTradingConf(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_AUTO_CONF_DLG, pParent)
 {
-
+	m_pParent = pParent;
 }
 
 CAutoTradingConf::~CAutoTradingConf()
@@ -86,7 +86,8 @@ BEGIN_MESSAGE_MAP(CAutoTradingConf, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_EVENT_MAX_PROFIT_RATIO, &CAutoTradingConf::OnBnClickedCheckEventMaxProfitRatio)
 	ON_BN_CLICKED(IDC_CHECK_AT_ONCE_SEL_TIME, &CAutoTradingConf::OnBnClickedCheckAtOnceSelTime)
 	ON_BN_CLICKED(IDC_BTN_LOAD_BUYMACRO, &CAutoTradingConf::OnBnClickedBtnLoadBuymacro)
-	ON_BN_CLICKED(IDCANCEL, &CAutoTradingConf::OnBnClickedCancel)
+	//ON_BN_CLICKED(IDCANCEL, &CAutoTradingConf::OnBnClickedCancel)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -984,35 +985,49 @@ void CAutoTradingConf::OnBnClickedBtnLoadBuymacro()
 	
 }
 
+/*
 
 void CAutoTradingConf::OnBnClickedCancel()
 {
 
-	DestroyWindow();
+	//DestroyWindow();
 
-	//CDialogEx::OnCancel();
+	CDialogEx::OnCancel();
 }
+
+*/
 
 
 void CAutoTradingConf::PostNcDestroy()
 {
 	
-	delete this;
-	CDialogEx::PostNcDestroy();
+	//delete this;
+	//CDialogEx::PostNcDestroy();
 }
 
 
-void CAutoTradingConf::OnCancel()
-{
-	
-	DestroyWindow();
-	CDialogEx::OnCancel();
-}
+//void CAutoTradingConf::OnCancel()
+//{
+//	
+//	//DestroyWindow();
+//	CDialogEx::OnCancel();
+//}
 
 
 void CAutoTradingConf::OnOK()
 {
 	
-	DestroyWindow();
+	//DestroyWindow();
 	CDialogEx::OnOK();
+}
+
+
+
+void CAutoTradingConf::OnClose()
+{
+	//m_pParent->PostMessage(UM_SCRENN_CLOSE, 5U, 0L);
+	//::AfxGetMainWnd()->PostMessageA(UM_SCRENN_CLOSE, 5U, 0L);
+	m_pParent->SendMessage(UM_SCRENN_CLOSE, 5U, 0L);
+
+	CDialogEx::OnClose();
 }

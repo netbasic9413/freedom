@@ -13,6 +13,7 @@ public:
 
 
 public:
+	CWnd* m_pParent;
 	CString		m_strScrNo;
 
 // Dialog Data
@@ -31,4 +32,6 @@ public:
 	virtual void OnCancel();
 	virtual void PostNcDestroy();
 	virtual BOOL OnInitDialog();
+	
+	afx_msg void OnClose();
 };

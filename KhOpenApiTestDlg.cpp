@@ -150,6 +150,7 @@ void CKhOpenApiTestDlg::OnPaint()
 
 void CKhOpenApiTestDlg::OnDestroy()
 {
+	/*
 	CString strKey;
 	CWnd *pWnd = NULL;
 	POSITION pos = m_mapScreen.GetStartPosition();
@@ -165,15 +166,16 @@ void CKhOpenApiTestDlg::OnDestroy()
 	}
 	m_mapScreen.RemoveAll();
 	m_mapScreenNum.RemoveAll();
+	*/
+	
 
 
-	/*
 	if (m_pRealAddDlg != NULL)
 	{
-		m_pRealAddDlg->DestroyWindow();
 		delete m_pRealAddDlg;
+		m_pRealAddDlg = NULL;
 	}
-	*/
+	
 
 	theApp.m_pLog->Log("프로그램을 종료합니다.");
 }
@@ -195,8 +197,35 @@ LRESULT CKhOpenApiTestDlg::OnScreenClose(WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam)
 	{
-		case 0:
+		case 0: //현재가 다이얼로그
+		{
+			delete m_pCurrentPriceDlg;
+			m_pCurrentPriceDlg = NULL;
+		}
+		break;
+
+		case 1: //주문 다이얼로그
+		{
+
+			delete m_pOrderDlg;
+			m_pOrderDlg = NULL;
+
+		}
+		break;
+
+		case 2: //관심 다이얼로그
+		{
+			delete m_pKwanSimDlg;
+			m_pKwanSimDlg = NULL;
+		}
+		break;
+
+		case 3: //조건검색 다이얼로그
 			{
+			delete m_pRealAddDlg;
+			m_pRealAddDlg = NULL;
+
+				/*
 				char *cScrNo = (char*)lParam;
 				CString strKey, strScrType;
 				strKey.Format("%s", cScrNo);
@@ -219,8 +248,28 @@ LRESULT CKhOpenApiTestDlg::OnScreenClose(WPARAM wParam, LPARAM lParam)
 				{
 					theApp.m_khOpenApi.DisconnectRealData(strKey);
 				}
+				*/
+				
 			}
 			break;
+		case 4: //수익률 다이얼로그
+		{
+			delete m_pRateDlg;
+			m_pRateDlg = NULL;
+		}
+		break;
+		case 5: //자동매매 설정
+		{
+			delete m_pAutoTradingConf;
+			m_pAutoTradingConf = NULL;
+		}
+		break;
+		case 6: //상태 다이얼로그
+		{
+			delete m_pStatusDlg;
+			m_pStatusDlg = NULL;
+		}
+			
 	}
 
 	return 0L;
@@ -257,7 +306,7 @@ void CKhOpenApiTestDlg::OnBtnCurrentPrice()
 	pCurrentPriceDlg->SendSearch();		// 조회 처리
 	*/
 
-	if (m_pCurrentPriceDlg == NULL)
+	//if (m_pCurrentPriceDlg == NULL)
 	{
 		m_pCurrentPriceDlg = new CCurrentPriceDlg(this);
 		m_pCurrentPriceDlg->m_strScrNo.Format("%04d", m_nScrN0);
@@ -787,18 +836,30 @@ void CKhOpenApiTestDlg::OnBnClickedBtnReal()
 	// 아래 함수를 호출하지 않으면 이후 조건명리스트를 불러올수가 없으니 조건 검색을 할 경우
 	// 무조건 이 함수를 처음에 불러와야 한다.
 	// 조건검색을 시작하려면 한번은 꼭 호출해야한다.
-	m_nRet = theApp.m_khOpenApi.GetConditionLoad();
+	//m_nRet = theApp.m_khOpenApi.GetConditionLoad();
 
-	if (m_nRet > 0)
+	//if (m_nRet > 0)
 	{
-		if (m_pRealAddDlg == NULL)
+		//if (m_pRealAddDlg == NULL)
 		{
+			RECT rcPos;
+			CRect rcPosStatusDlg;
+
+			::GetWindowRect(this->m_hWnd, &rcPos);
 			m_pRealAddDlg = new CRealAddDlg(this);
 			m_pRealAddDlg->m_strScrNo.Format(_T("%04d"), m_nScrN0);
 			m_pRealAddDlg->Create(IDD_CON_SET);
-
 			m_mapScreen.SetAt(m_pRealAddDlg->m_strScrNo, m_pRealAddDlg);
+
+			::GetWindowRect(m_pRealAddDlg->m_hWnd, &rcPosStatusDlg);
+			m_pRealAddDlg->MoveWindow(rcPos.left - 590, rcPos.top, rcPosStatusDlg.Width(), rcPosStatusDlg.Height(), 0);
 		}
+		
+
+		
+
+		
+		
 		
 	
 		/*
@@ -819,8 +880,12 @@ void CKhOpenApiTestDlg::OnBnClickedButton1()
 		return;
 	}
 
-	if (m_pRateDlg == NULL)
+	//if (m_pRateDlg == NULL)
 	{
+		RECT rcPos;
+		CRect rcPosStatusDlg;
+
+		::GetWindowRect(this->m_hWnd, &rcPos);
 		m_pRateDlg = new CRateDlg(this, m_strServerGubun);
 		ASSERT(m_pRateDlg != nullptr);
 
@@ -828,13 +893,17 @@ void CKhOpenApiTestDlg::OnBnClickedButton1()
 		m_pRateDlg->Create(IDD_RATE);
 
 		m_mapScreen.SetAt(m_pRateDlg->m_strScrNo, m_pRateDlg);
+
+
+		::GetWindowRect(m_pRateDlg->m_hWnd, &rcPosStatusDlg);
+		m_pRateDlg->MoveWindow(rcPos.left + 760, rcPos.top, rcPosStatusDlg.Width(), rcPosStatusDlg.Height(), 0);
 	}
 
 	/*
 	CRateDlg *pRateDlg = new CRateDlg(this, m_strServerGubun);
 	ASSERT(pRateDlg != nullptr);
 
-	pRateDlg->m_strScrNo.Format(_T("%04d"), m_nScrN0);
+	pRateDlg->m_strScrNo.Format(_T("%04d"), m_nScrN0);s
 	pRateDlg->Create(IDD_RATE);
 
 	m_mapScreen.SetAt(pRateDlg->m_strScrNo, pRateDlg);
@@ -869,7 +938,7 @@ void CKhOpenApiTestDlg::OnBnClickedBtnAutoConfig()
 	m_mapScreen.SetAt(pAutoTradingConf->m_strScrNo, pAutoTradingConf);
 	*/
 
-	m_pAutoTradingConf = new CAutoTradingConf();
+	m_pAutoTradingConf = new CAutoTradingConf(this);
 	m_pAutoTradingConf->m_strScrNo.Format("%04d", m_nScrN0);
 	m_pAutoTradingConf->Create(IDD_AUTO_CONF_DLG);
 
@@ -886,17 +955,19 @@ void CKhOpenApiTestDlg::OnBnClickedBtnStartAutoRun()
 
 	if (m_bAutoBuySell == FALSE)
 	{
-		if (m_pStatusDlg==NULL)
+		//if (m_pStatusDlg==NULL)
 		{
+			
+
 			RECT rcPos;
-			::GetWindowRect(AfxGetMainWnd()->m_hWnd, &rcPos);
-			//LPRECT lpRect;
-			//GetWindowRect(lpRect);
-			m_pStatusDlg = new CStatusDlg();
+			CRect rcPosStatusDlg;
+	
+			::GetWindowRect(this->m_hWnd, &rcPos);
+			m_pStatusDlg = new CStatusDlg(this);
 			m_pStatusDlg->Create(IDD_STATUS_DLG);
 			m_mapScreen.SetAt(m_pStatusDlg->m_strScrNo, m_pStatusDlg);
-			//::SetWindowPos(m_pStatusDlg->m_hWnd, rcPos.left+5, rcPos.top+5, 0, 0, SWP_NOSIZE);
-			SetWindowPos(m_pStatusDlg, rcPos.left, (rcPos.bottom - rcPos.top) + 5 , 0, 0, SWP_NOSIZE);
+			::GetWindowRect(m_pStatusDlg->m_hWnd, &rcPosStatusDlg);
+			m_pStatusDlg->MoveWindow(rcPos.left, rcPos.top + 230, rcPosStatusDlg.Width(), rcPosStatusDlg.Height(), 0);
 			
 			
 		}

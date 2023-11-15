@@ -323,6 +323,7 @@ void CCurrentPriceDlg::OnPaint()
 //******************************************************************/
 void CCurrentPriceDlg::OnClose()
 {
+	/*
 	// 화면 닫을 때 부모윈도우에게 통보(화면 관리 위해)
 	if (m_pParent)
 	{
@@ -344,6 +345,10 @@ void CCurrentPriceDlg::OnClose()
 		memcpy(cScrNo3, m_strScrNo3, nLen);
 		m_pParent->PostMessage(UM_SCRENN_CLOSE, 0U, (LPARAM)cScrNo3);
 	}
+	*/
+	
+	//m_pParent->PostMessage(UM_SCRENN_CLOSE, 0U, 0L);
+	m_pParent->SendMessage(UM_SCRENN_CLOSE, 0U, 0L);
 
 	//DestroyWindow();
 
@@ -1063,25 +1068,25 @@ void CCurrentPriceDlg::OnCancel()
 {
 	
 
-	DestroyWindow();
+	//DestroyWindow();
 
-	//CDialogEx::OnCancel();
+	CDialogEx::OnCancel();
 }
 
 
 void CCurrentPriceDlg::OnOK()
 {
 	
-	DestroyWindow();
-	//CDialogEx::OnOK();
+	//DestroyWindow();
+	CDialogEx::OnOK();
 }
 
 
 void CCurrentPriceDlg::PostNcDestroy()
 {
 	
-	delete this;
-	CDialogEx::PostNcDestroy();
+	//delete this;
+	//CDialogEx::PostNcDestroy();
 }
 
 

@@ -139,7 +139,7 @@ void CKwanSimDlg::OnClose()
 		char *cScrNo = new char[nLen + 1];
 		memset(cScrNo, 0x00, nLen + 1);
 		memcpy(cScrNo, m_strScrNo, nLen);
-		m_pParent->PostMessage(UM_SCRENN_CLOSE, 0U, (LPARAM)cScrNo);
+		m_pParent->PostMessage(UM_SCRENN_CLOSE, 2U, (LPARAM)cScrNo);
 	}
 
 	CDialogEx::OnClose();

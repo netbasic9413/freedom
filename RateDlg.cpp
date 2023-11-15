@@ -184,7 +184,7 @@ void CRateDlg::OnClose()
 		char *cScrNo = new char[nLen + 1];
 		memset(cScrNo, 0x00, nLen + 1);
 		memcpy(cScrNo, m_strScrNo, nLen);
-		m_pParent->PostMessage(UM_SCRENN_CLOSE, 0U, (LPARAM)cScrNo);
+		m_pParent->PostMessage(UM_SCRENN_CLOSE, 4U, (LPARAM)cScrNo);
 	}
 
 	CDialogEx::OnClose();
@@ -577,22 +577,22 @@ void CRateDlg::InitAcc()
 void CRateDlg::OnCancel()
 {
 	
-	DestroyWindow();
-	//CDialogEx::OnCancel();
+	//DestroyWindow();
+	CDialogEx::OnCancel();
 }
 
 
 void CRateDlg::OnOK()
 {
 	
-	DestroyWindow();
-	//CDialogEx::OnOK();
+	//DestroyWindow();
+	CDialogEx::OnOK();
 }
 
 
 void CRateDlg::PostNcDestroy()
 {
 	
-	delete this;
-	CDialogEx::PostNcDestroy();
+	//delete this;
+	//CDialogEx::PostNcDestroy();
 }
