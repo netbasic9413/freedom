@@ -716,7 +716,7 @@ void CCurrentPriceDlg::OnReceiveTrDataKhopenapictrl(LPCTSTR sScrNo, LPCTSTR sRQN
 	{
 		CString strData;
 		CStringArray arrData;
-		int nFieldCnt = sizeof(lstOPT10004) / sizeof(*lstOPT10004);		// 전체크기 / 원소크기 = 원소개수
+		int nFieldCnt = sizeof(lstOPT10004) / sizeof(*lstOPT10004);		// 전체크기 / 원소크기 = 원소 개수
 
 		strRQName = _T("주식호가");
 		int i, j, nCnt = theApp.m_khOpenApi.GetRepeatCnt(sTrcode, strRQName);
@@ -726,6 +726,11 @@ void CCurrentPriceDlg::OnReceiveTrDataKhopenapictrl(LPCTSTR sScrNo, LPCTSTR sRQN
 			for (j = 0; j < nFieldCnt; j++)
 			{
 				strData = theApp.m_khOpenApi.GetCommData(sTrcode, strRQName, i, lstOPT10004[j].strKey);	strData.Trim();
+
+				//andy
+				// i=0; strData; 매도잔량
+				// i=1; strData; 매수잔량
+
 				arrData.Add(strData);
 			}
 			SetDataHogaGrid(arrData);
@@ -1047,6 +1052,11 @@ void CCurrentPriceDlg::SetDataHogaGrid(CStringArray &arrData, CString strRealTyp
 	for (i = nStart; i < nEnd; i++)
 	{
 		strData = arrData.GetAt(i);
+
+		//andy
+		// i=0; strData; 매도잔량
+		// i=1; strData; 매수잔량
+
 		if (lstOPT10004[i].bTextColor)
 		{
 			theApp.SetDataFgColour(&m_grdHoga, lstOPT10004[i].nRow, lstOPT10004[i].nCol, strData);

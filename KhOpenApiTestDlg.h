@@ -96,4 +96,5 @@ public:
 	afx_msg void OnBnClickedBtnStartAutoRun();
 	afx_msg void OnBnClickedBtnStopAutoRun();
 	//afx_msg void OnBnDeleteDlg();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
