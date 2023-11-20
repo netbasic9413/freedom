@@ -44,6 +44,7 @@ void CKhOpenApiTestDlg::DoDataExchange(CDataExchange* pDX)
 	//{{AFX_DATA_MAP(CKhOpenApiTestDlg)
 	DDX_Control(pDX, IDC_KHOPENAPICTRL1, theApp.m_khOpenApi);
 	//}}AFX_DATA_MAP
+	DDX_Control(pDX, IDC_CHECK_AUTO_LOGIN, m_checkAutoLogin);
 }
 
 //*******************************************************************/
@@ -67,6 +68,7 @@ BEGIN_MESSAGE_MAP(CKhOpenApiTestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_STOP_AUTO_RUN, &CKhOpenApiTestDlg::OnBnClickedBtnStopAutoRun)
 	//ON_MESSAGE(UM_DELETE_DLG, &CKhOpenApiTestDlg::OnBnDeleteDlg)
 	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_CHECK_AUTO_LOGIN, &CKhOpenApiTestDlg::OnBnClickedCheckAutoLogin)
 END_MESSAGE_MAP()
 
 //*******************************************************************/
@@ -123,8 +125,24 @@ BOOL CKhOpenApiTestDlg::OnInitDialog()
 	//OnBnClickedButton1();
 	//OnBnClickedBtnStartAutoRun();
 
+	CString strMainCfg = theApp.m_sAppPath + "/data/main_cfg.ini";
+
+
+	char szItem[2];
+	int nSize = sizeof(szItem);
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("MAIN_CFG", "check_autologin", "0", szItem, nSize, strMainCfg);
+	m_checkAutoLogin.SetCheck(atoi(szItem));
+
+
+
 	SetTimer(1001, 500, NULL);
 
+
+	if (m_checkAutoLogin.GetCheck())
+	{
+		OnBntLOGIN();
+	}
 
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
@@ -997,10 +1015,21 @@ void CKhOpenApiTestDlg::OnTimer(UINT_PTR nIDEvent)
 	{
 		OnBnClickedBtnReal();
 		OnBnClickedButton1();
-		OnBnClickedBtnStartAutoRun();
+		//OnBnClickedBtnStartAutoRun();
 
 		KillTimer(1001);
 	}
 
 	CDialogEx::OnTimer(nIDEvent);
+}
+
+
+void CKhOpenApiTestDlg::OnBnClickedCheckAutoLogin()
+{
+	CString strMainCfg = theApp.m_sAppPath + "/data/main_cfg.ini";
+
+	int nGetChk = m_checkAutoLogin.GetCheck();
+	CString str;
+	str.Format(_T("%d"), nGetChk);
+	::WritePrivateProfileString("MAIN_CFG", "check_autologin", (LPCSTR)str, strMainCfg);
 }

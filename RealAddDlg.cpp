@@ -644,8 +644,45 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 		//등락률비교
 		if (nHighLowRate >= 1.0)
 		{
-			//현재가 비교
+			//현재가 비교 (매수잔량/매도 잔량 비교)
 
+			/*
+			CString strRQName = _T("호가");
+			CString strTRCode = TR_OPT10004;
+			theApp.m_khOpenApi.SetInputValue("종목코드", sJongmokCode);
+			long lRet = theApp.m_khOpenApi.CommRqData(strRQName, strTRCode, 0, m_strScrNo);
+			if (!theApp.IsError(lRet))
+			{
+				CString strErr;
+				strErr.Format(_T("주식호가요청 에러 [%s][%d]"), strTRCode, lRet);
+				//OutputDebugString(strErr);
+			}
+			*/
+			
+			/*
+			CString strTRCode = TR_OPT10004;
+
+			CString strRQName = _T("주식호가");
+			int i, j, nCnt = theApp.m_khOpenApi.GetRepeatCnt(strTRCode, strRQName);
+			for (i = 0; i < nCnt; i++)
+			{
+				//for (j = 0; j < nFieldCnt; j++)
+				{
+					strData = theApp.m_khOpenApi.GetCommData(strTRCode, strRQName, 0, "총매수잔량");	
+					strData.Trim();
+
+					//andy
+					// i=0; strData; 매도잔량
+					// i=1; strData; 매수잔량
+
+					
+				}
+				
+			}
+			*/
+
+			
+			
 		}
 	}
 	

@@ -97,4 +97,6 @@ public:
 	afx_msg void OnBnClickedBtnStopAutoRun();
 	//afx_msg void OnBnDeleteDlg();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	CButton m_checkAutoLogin;
+	afx_msg void OnBnClickedCheckAutoLogin();
 };
