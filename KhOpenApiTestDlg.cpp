@@ -1014,7 +1014,7 @@ void CKhOpenApiTestDlg::OnTimer(UINT_PTR nIDEvent)
 	if (1001 == nIDEvent)
 	{
 		OnBnClickedBtnReal();
-		OnBnClickedButton1();
+		//OnBnClickedButton1();
 		//OnBnClickedBtnStartAutoRun();
 
 		KillTimer(1001);

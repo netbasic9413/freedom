@@ -566,6 +566,10 @@ void CRateDlg::InitAcc()
 		if (strAcc.Right(2) == _T("11"))
 		{
 			((CStatic*)GetDlgItem(IDC_EDT_ACC))->SetWindowText(strAcc);
+
+			CString strMainCfg = theApp.m_sAppPath + "/data/main_cfg.ini";
+			::WritePrivateProfileString("MAIN_CFG", "acc_1", (LPCSTR)strAcc, strMainCfg);
+	
 			break;
 		}
 	}

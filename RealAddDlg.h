@@ -28,6 +28,8 @@ public:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 
 public:
+	int m_nBuyCount;
+	CString m_strAcc1;
 	CWnd*					m_pParent;
 	CString					m_strScrNo;
 	CString					m_strConditionName;			//현재 조건명

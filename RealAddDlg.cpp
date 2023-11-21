@@ -17,6 +17,8 @@
 #include "RealAddDlg.h"
 #include "afxdialogex.h"
 
+#include "KhOpenApiTestDlg.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -86,6 +88,20 @@ BOOL CRealAddDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	InitRealAddGrid();				// 그리드 초기 처리
+
+	m_nBuyCount = 0;
+
+	CString strMainCfg = theApp.m_sAppPath + "/data/main_cfg.ini";
+	char szItem[20];
+	int nSize = sizeof(szItem);
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("MAIN_CFG", "acc_1", "0", szItem, nSize, strMainCfg);
+	//계좌번호 저장
+	m_strAcc1 = (LPCSTR)(LPSTR)szItem;
+
+
+
+
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -197,6 +213,36 @@ void CRealAddDlg::InitRealAddGrid()
 
 void CRealAddDlg::OnReceiveTrDataKhopenapictrl(LPCTSTR sScrNo, LPCTSTR sRQName, LPCTSTR sTrcode, LPCTSTR sRecordName, LPCTSTR sPrevNext, long nDataLength, LPCTSTR sErrorCode, LPCTSTR sMessage, LPCTSTR sSplmMsg)
 {// 시세조회 수신 이벤트
+	CString strRQName = sRQName;
+
+	if (strRQName == _T("호가"))			// 주식호가 설정
+	{
+	CString strData;
+	CStringArray arrData;
+	//int nFieldCnt = sizeof(lstOPT10004) / sizeof(*lstOPT10004);		// 전체크기 / 원소크기 = 원소 개수
+
+	strRQName = _T("주식호가");
+	int i, j, nCnt = theApp.m_khOpenApi.GetRepeatCnt(sTrcode, strRQName);
+	for (i = 0; i < nCnt; i++)
+	{
+		//arrData.RemoveAll();
+		//for (j = 0; j < nFieldCnt; j++)
+		{
+			strData = theApp.m_khOpenApi.GetCommData(sTrcode, strRQName, i,_T("총매수잔량"));	
+			strData.Trim();
+
+			//andy
+			// i=0; strData; 매도잔량
+			// i=1; strData; 매수잔량
+
+			
+		}
+		
+	}
+	}
+
+
+
 	return;
 }
 
@@ -644,44 +690,54 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 		//등락률비교
 		if (nHighLowRate >= 1.0)
 		{
-			//현재가 비교 (매수잔량/매도 잔량 비교)
-
-			/*
-			CString strRQName = _T("호가");
-			CString strTRCode = TR_OPT10004;
-			theApp.m_khOpenApi.SetInputValue("종목코드", sJongmokCode);
-			long lRet = theApp.m_khOpenApi.CommRqData(strRQName, strTRCode, 0, m_strScrNo);
-			if (!theApp.IsError(lRet))
+			if (m_nBuyCount < 3)
 			{
-				CString strErr;
-				strErr.Format(_T("주식호가요청 에러 [%s][%d]"), strTRCode, lRet);
-				//OutputDebugString(strErr);
-			}
-			*/
-			
-			/*
-			CString strTRCode = TR_OPT10004;
+				//매수
+				CString strRQName(_T("주식주문"));
+				long lRet = OP_ERR_ORD_OVERFLOW;
+				CString strJCode = sJongmokCode;
+				long lOrderType = 1; //1: 신규매수
+				long lQty = 1; //주문수량
+				long lPrice = 0; //주문단가
 
-			CString strRQName = _T("주식호가");
-			int i, j, nCnt = theApp.m_khOpenApi.GetRepeatCnt(strTRCode, strRQName);
-			for (i = 0; i < nCnt; i++)
-			{
-				//for (j = 0; j < nFieldCnt; j++)
+				// 거래구분 취득
+				// 00:지정가, 03:시장가, 05:조건부지정가, 06:최유리지정가, 07:최우선지정가, 
+				// 10:지정가IOC, 13:시장가IOC, 16:최유리IOC, 20:지정가FOK, 23:시장가FOK, 
+				// 26:최유리FOK, 61:장개시전시간외, 62:시간외단일가매매, 81:장후시간외종가
+				CString strHogaGb;
+				strHogaGb.Format(_T("%02d"), 3); //시장가
+
+				CString strOrgNo = ""; //원주문번호
+
+				if (m_strAcc1.GetLength() > 0)
 				{
-					strData = theApp.m_khOpenApi.GetCommData(strTRCode, strRQName, 0, "총매수잔량");	
-					strData.Trim();
 
-					//andy
-					// i=0; strData; 매도잔량
-					// i=1; strData; 매수잔량
+					/// 현금(현물)주문이면...
+					lRet = theApp.m_khOpenApi.SendOrder(strRQName, m_strScrNo, m_strAcc1, lOrderType, strJCode, lQty, lPrice, strHogaGb, strOrgNo);
+					if (lRet == OP_ERR_ORD_OVERFLOW)
+					{
+						Sleep(300);
+						
+					}
+					if (!theApp.IsError(lRet))
+					{
+						return;
+					}
+					m_nBuyCount++;
 
+					CKhOpenApiTestDlg* pMdlg = (CKhOpenApiTestDlg*)::AfxGetMainWnd();
+					if (pMdlg->m_pStatusDlg != NULL)
+					{
+						//int nGetCount = pMdlg->m_pStatusDlg->m_ListStatus.GetCount();
+						CString strStr;
+						strStr.Format(_T("[매수] %s 시장가 %ld주"), strJCode, lQty);
+						pMdlg->m_pStatusDlg->m_ListStatus.InsertString(-1, strStr);
+					}
 					
-				}
+			}
+			
 				
 			}
-			*/
-
-			
 			
 		}
 	}
