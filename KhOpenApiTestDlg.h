@@ -58,7 +58,7 @@ public:
 	CStatusDlg* m_pStatusDlg;
 
 	BOOL m_bAutoBuySell;
-
+	void CreateStatusDlg();
 
 
 protected:

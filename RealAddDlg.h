@@ -81,4 +81,5 @@ public:
 	virtual void OnCancel();
 	virtual void OnOK();
 	virtual void PostNcDestroy();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

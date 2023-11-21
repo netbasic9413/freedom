@@ -973,6 +973,7 @@ void CKhOpenApiTestDlg::OnBnClickedBtnAutoConfig()
 
 void CKhOpenApiTestDlg::OnBnClickedBtnStartAutoRun()
 {
+	/*
 	if (!GetNextScreenNum(6))
 	{
 		return;
@@ -983,7 +984,6 @@ void CKhOpenApiTestDlg::OnBnClickedBtnStartAutoRun()
 		//if (m_pStatusDlg==NULL)
 		{
 			
-
 			RECT rcPos;
 			CRect rcPosStatusDlg;
 	
@@ -993,13 +993,12 @@ void CKhOpenApiTestDlg::OnBnClickedBtnStartAutoRun()
 			m_mapScreen.SetAt(m_pStatusDlg->m_strScrNo, m_pStatusDlg);
 			::GetWindowRect(m_pStatusDlg->m_hWnd, &rcPosStatusDlg);
 			m_pStatusDlg->MoveWindow(rcPos.left, rcPos.top + 230, rcPosStatusDlg.Width(), rcPosStatusDlg.Height(), 0);
-			
-			
 		}
-		
-
-
 	}
+	*/
+
+
+	
 }
 
 
@@ -1016,6 +1015,7 @@ void CKhOpenApiTestDlg::OnTimer(UINT_PTR nIDEvent)
 		OnBnClickedBtnReal();
 		//OnBnClickedButton1();
 		//OnBnClickedBtnStartAutoRun();
+		CreateStatusDlg();
 
 		KillTimer(1001);
 	}
@@ -1033,3 +1033,20 @@ void CKhOpenApiTestDlg::OnBnClickedCheckAutoLogin()
 	str.Format(_T("%d"), nGetChk);
 	::WritePrivateProfileString("MAIN_CFG", "check_autologin", (LPCSTR)str, strMainCfg);
 }
+
+
+
+void CKhOpenApiTestDlg::CreateStatusDlg()
+{
+	RECT rcPos;
+	CRect rcPosStatusDlg;
+
+	::GetWindowRect(this->m_hWnd, &rcPos);
+	m_pStatusDlg = new CStatusDlg(this);
+	m_pStatusDlg->Create(IDD_STATUS_DLG);
+	m_mapScreen.SetAt(m_pStatusDlg->m_strScrNo, m_pStatusDlg);
+	::GetWindowRect(m_pStatusDlg->m_hWnd, &rcPosStatusDlg);
+	m_pStatusDlg->MoveWindow(rcPos.left, rcPos.top + 230, rcPosStatusDlg.Width(), rcPosStatusDlg.Height(), 0);
+
+}
+

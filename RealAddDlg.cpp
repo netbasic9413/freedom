@@ -76,6 +76,7 @@ BEGIN_MESSAGE_MAP(CRealAddDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CRealAddDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CRealAddDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BTN_SENDCOND, &CRealAddDlg::OnBnClickedBtnSendcond)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 BOOL CRealAddDlg::OnInitDialog()
@@ -101,7 +102,7 @@ BOOL CRealAddDlg::OnInitDialog()
 
 
 
-
+	//SetTimer(2001, 500, NULL);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -598,7 +599,7 @@ void CRealAddDlg::OnBnClickedBtnSendcond()
 	if (lRet == 0)
 	{//에러
 		CString strLog;
-		strLog.Format("조건검색에 실패하였습니다. lRet = %l", lRet);
+		strLog.Format("조건검색에 실패하였습니다. lRet = %ld", lRet);
 		theApp.m_pLog->Log(strLog);
 		return;
 	}
@@ -804,4 +805,36 @@ void CRealAddDlg::PostNcDestroy()
 	
 	//delete this;
 	//CDialogEx::PostNcDestroy();
+}
+
+
+void CRealAddDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	if (nIDEvent == 2001)
+	{
+		CString strLoginStatus = theApp.m_khOpenApi.GetLoginInfo(_T("USER_ID"));
+		if (strLoginStatus.CompareNoCase(_T("netbasic")) == 0)
+		{
+
+			KillTimer(2001);
+			OnBnClickedBtnCondi();
+			SetTimer(2002, 1000, NULL);
+		}
+
+	}
+
+	if (nIDEvent == 2002)
+	{
+		KillTimer(2002);
+		//OnBnClickedBtnSendcond();
+		SetTimer(2003, 1000, NULL);
+	}
+
+	if (nIDEvent == 2003)
+	{
+		KillTimer(2003);
+		OnBtnSearch();
+	}
+
+	CDialogEx::OnTimer(nIDEvent);
 }
