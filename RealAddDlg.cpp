@@ -662,6 +662,25 @@ CString CRealAddDlg::GetConditionName(CString strTotCondition)
 	return strRet;
 }
 
+/*
+CString CRealAddDlg::GetTime()
+{
+	// Declare variables
+	SYSTEMTIME time;
+	CString sTime;
+
+	// Get time
+	GetLocalTime(&time);
+
+	// Set up time
+	sTime.Format(_T("[%02d:%02d:%02d:%03d] - "), time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+
+	// Return value
+	return sTime;
+}
+*/
+
+
 void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arrData)
 {
 	// 종목코드에 맞는 행 찾기
@@ -719,22 +738,38 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 						Sleep(300);
 						
 					}
-					if (!theApp.IsError(lRet))
-					{
-						return;
-					}
-					m_nBuyCount++;
-
+					
 					CKhOpenApiTestDlg* pMdlg = (CKhOpenApiTestDlg*)::AfxGetMainWnd();
-					if (pMdlg->m_pStatusDlg != NULL)
+					if (lRet < 0)
 					{
-						//int nGetCount = pMdlg->m_pStatusDlg->m_ListStatus.GetCount();
-						CString strStr;
-						strStr.Format(_T("[매수] %s 시장가 %ld주"), strJCode, lQty);
-						pMdlg->m_pStatusDlg->m_ListStatus.InsertString(-1, strStr);
+						if (pMdlg->m_pStatusDlg != NULL)
+						{
+							//int nGetCount = pMdlg->m_pStatusDlg->m_ListStatus.GetCount();
+							CString strStr;
+							strStr.Format(_T("%s [매수] %s 시장가 %ld주, 에러발생, 에러코드: %ld"), theApp.m_pLog->GetTime(), strJCode, lQty, lRet);
+							pMdlg->m_pStatusDlg->m_ListStatus.InsertString(-1, strStr);
+							theApp.m_pLog->Log(strStr);
+
+							return;
+						}
+					}
+					else
+					{
+						m_nBuyCount++;
+
+						//CKhOpenApiTestDlg* pMdlg = (CKhOpenApiTestDlg*)::AfxGetMainWnd();
+						if (pMdlg->m_pStatusDlg != NULL)
+						{
+							//int nGetCount = pMdlg->m_pStatusDlg->m_ListStatus.GetCount();
+							CString strStr;
+							strStr.Format(_T("%s [매수] %s 시장가 %ld주"), theApp.m_pLog->GetTime(), strJCode, lQty);
+							pMdlg->m_pStatusDlg->m_ListStatus.InsertString(-1, strStr);
+							theApp.m_pLog->Log(strStr);
+						}
 					}
 					
-			}
+					
+				}
 			
 				
 			}

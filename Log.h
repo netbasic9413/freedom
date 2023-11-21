@@ -41,12 +41,16 @@ public:
 
 	void SetAutoDirectoryName(CString strPath);
 
+	// Functions
+	CString GetTime();
+
+
+
 private:
 	// Constructor & destructor
 	CLog();			// Private constructor because singleton!
 
-	// Functions
-	CString GetTime();
+	
 
 	// Variables
 	static std::auto_ptr<CLog> sm_inst;

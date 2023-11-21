@@ -57,6 +57,7 @@ public:
 	void SetDataRealAddGrid(CStringArray &arrData, CString strRealType = "");
 
 	CString GetConditionName(CString strTotCondition);
+	//CString GetTime();
 
 // 구현입니다.
 protected:
