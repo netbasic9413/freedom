@@ -110,6 +110,11 @@ public:
 	int m_nBuyLowValuePerStock; //주당매수최저가
 	int m_nEventlSmallestVolume; //종목최소거래량
 
+	//종목별 한번 매수별 주수
+	int m_nEventBuyPerCount;
+	//종목별 한번 매도별 주수
+	int m_nEventSellPerCount;
+
 
 
 

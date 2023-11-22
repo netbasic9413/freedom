@@ -230,7 +230,8 @@ void CRealAddDlg::OnReceiveTrDataKhopenapictrl(LPCTSTR sScrNo, LPCTSTR sRQName, 
 	//int nFieldCnt = sizeof(lstOPT10004) / sizeof(*lstOPT10004);		// 전체크기 / 원소크기 = 원소 개수
 
 	strRQName = _T("주식호가");
-	int i, j, nCnt = theApp.m_khOpenApi.GetRepeatCnt(sTrcode, strRQName);
+	int i;
+	int nCnt = theApp.m_khOpenApi.GetRepeatCnt(sTrcode, strRQName);
 	for (i = 0; i < nCnt; i++)
 	{
 		//arrData.RemoveAll();
@@ -735,7 +736,7 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 				long lRet = OP_ERR_ORD_OVERFLOW;
 				CString strJCode = sJongmokCode;
 				long lOrderType = 1; //1: 신규매수
-				long lQty = 1; //주문수량
+				long lQty = theApp.m_nEventBuyPerCount; //주문수량
 				long lPrice = 0; //주문단가
 
 				// 거래구분 취득

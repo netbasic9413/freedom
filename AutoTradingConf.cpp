@@ -6,7 +6,7 @@
 #include "KhOpenApiTest.h"
 #include "AutoTradingConf.h"
 #include "afxdialogex.h"
-#include "shlwapi.h""
+//#include "shlwapi.h""
 
 
 // CAutoTradingConf dialog
@@ -123,6 +123,15 @@ void CAutoTradingConf::OnBnClickedOk()
 	CString strGetExeMacroPath = szItem;
 
 
+	//종목별 매수당 주수
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_per_count", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventBuyPerCount = atoi(szItem);
+
+	//종목별 매도당 주수
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_per_count", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventSellPerCount = atoi(szItem);
 
 	//종목별익절
 	//종목익절 (check)
@@ -270,6 +279,26 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 		return;
 	}
 	::WritePrivateProfileString("AUTO_BUY_COND_CONF", "event_smallest_volume", (LPCSTR)str, strFileName);
+
+	//자동매수조건설정_종목별 한번매수 주수
+	((CEdit*)GetDlgItem(IDC_EDIT_EVENT_BUY_PER_COUNT))->GetWindowText(str);
+	if (str.GetLength() <= 0)
+	{
+		AfxMessageBox("종목별 한번 매수 주수을 입력 해 주세요.");
+		return;
+	}
+	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_per_count", (LPCSTR)str, strFileName);
+
+
+	//자동매수조건설정_종목별 한번매수 주수
+	((CEdit*)GetDlgItem(IDC_EDIT_EVENT_SELL_PER_COUNT))->GetWindowText(str);
+	if (str.GetLength() <= 0)
+	{
+		AfxMessageBox("종목별 한번 매도 주수을 입력 해 주세요.");
+		return;
+	}
+	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_per_count", (LPCSTR)str, strFileName);
+
 
 
 	//자동매수조건설정_매수조건식(체크)
@@ -606,6 +635,17 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "event_smallest_volume", "", szItem, nSize, strPathName);
 	SetDlgItemText(IDC_EDIT_EVENT_SMALLEST_VOLUME, LPCTSTR(szItem));
+
+	//종목별 한번 매수 주수
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_per_count", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_EVENT_BUY_PER_COUNT, LPCTSTR(szItem));
+
+	//종목별 한번 매도 주수
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_per_count", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_EVENT_SELL_PER_COUNT, LPCTSTR(szItem));
+
 	//매수조건식 (check)
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_buy_macro", "0", szItem, nSize, strPathName);
@@ -704,6 +744,7 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 		::GetPrivateProfileString("ALL_SEL_CONF", "allsell_lossamount", "0", szItem, nSize, strPathName);
 		SetDlgItemText(IDC_EDIT_LOSS_AMOUNT, LPCTSTR(szItem));
 	}
+
 
 	//종목청산방식
 	//종목익절 (check)

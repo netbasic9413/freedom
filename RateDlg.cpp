@@ -512,7 +512,8 @@ void CRateDlg::SetRate(int nRow, CString strCode)
 	//andy
 	//매도
 	double dRate = atof(strTemp);
-	if (dRate > 3.0)
+	//종목익절 (check) and 종목익절률
+	if ((dRate > theApp.m_nEventProfitRate) && theApp.m_nEventProfitChk)
 	{
 		if (m_nSellCount < 2)
 		{
@@ -521,7 +522,7 @@ void CRateDlg::SetRate(int nRow, CString strCode)
 			long lRet = OP_ERR_ORD_OVERFLOW;
 			CString strJCode = strCode;
 			long lOrderType = 2; //1: 신규매수, 2:신규매도, 
-			long lQty = 1; //주문수량
+			long lQty = theApp.m_nEventSellPerCount; //주문수량
 			long lPrice = 0; //주문단가
 
 			// 거래구분 취득
