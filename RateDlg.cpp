@@ -17,6 +17,8 @@
 #include "afxdialogex.h"
 #include <math.h>
 
+#include "KhOpenApiTestDlg.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -145,7 +147,19 @@ BOOL CRateDlg::OnInitDialog()
 		, COMMISSION2 * 100
 		);
 	SetDlgItemText(IDC_ST_RATE_INFO, strMsg);
+
+	m_nSellCount = 0;
 	InitAcc();
+
+	CString strMainCfg = theApp.m_sAppPath + "/data/main_cfg.ini";
+	char szItem[20];
+	int nSize = sizeof(szItem);
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("MAIN_CFG", "acc_1", "0", szItem, nSize, strMainCfg);
+	//계좌번호 저장
+	m_strAcc1 = (LPCSTR)(LPSTR)szItem;
+
+
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -494,6 +508,75 @@ void CRateDlg::SetRate(int nRow, CString strCode)
 	}
 	strTemp.Format(_T("%0.2lf %%"), m_Rate);
 	m_grdRate.SetItemText(nRow, 7,  theApp.ConvDataFormat(lstFID[7].nDataType, strTemp, lstFID[7].strBeforeData, lstFID[7].strAfterData));
+
+	//andy
+	//매도
+	double dRate = atof(strTemp);
+	if (dRate > 3.0)
+	{
+		if (m_nSellCount < 2)
+		{
+
+			CString strRQName(_T("주식주문"));
+			long lRet = OP_ERR_ORD_OVERFLOW;
+			CString strJCode = strCode;
+			long lOrderType = 2; //1: 신규매수, 2:신규매도, 
+			long lQty = 1; //주문수량
+			long lPrice = 0; //주문단가
+
+			// 거래구분 취득
+			// 00:지정가, 03:시장가, 05:조건부지정가, 06:최유리지정가, 07:최우선지정가, 
+			// 10:지정가IOC, 13:시장가IOC, 16:최유리IOC, 20:지정가FOK, 23:시장가FOK, 
+			// 26:최유리FOK, 61:장개시전시간외, 62:시간외단일가매매, 81:장후시간외종가
+			CString strHogaGb;
+			strHogaGb.Format(_T("%02d"), 3); //시장가
+
+			CString strOrgNo = ""; //원주문번호
+
+			if (m_strAcc1.GetLength() > 0)
+			{
+				/// 현금(현물)주문이면...
+				lRet = theApp.m_khOpenApi.SendOrder(strRQName, "0002", m_strAcc1, lOrderType, strJCode, lQty, lPrice, strHogaGb, strOrgNo);
+				//Sleep(300);
+
+			}
+
+			CKhOpenApiTestDlg* pMdlg = (CKhOpenApiTestDlg*)::AfxGetMainWnd();
+
+			if (lRet == 0)
+			{
+				m_nSellCount++;
+				if (pMdlg->m_pStatusDlg != NULL)
+				{
+					CString strStr;
+					strStr.Format(_T("%s [매도] %s 시장가 %ld주"), theApp.m_pLog->GetTime(), strJCode, lQty);
+					pMdlg->m_pStatusDlg->m_ListStatus.InsertString(-1, strStr);
+					theApp.m_pLog->Log(strStr);
+				}
+			}
+			else
+			{
+				
+				if (lRet < 0)
+				{
+					if (pMdlg->m_pStatusDlg != NULL)
+					{
+						
+						CString strStr;
+						strStr.Format(_T("%s [매도] %s 시장가 %ld주, 에러발생, 에러코드: %ld"), theApp.m_pLog->GetTime(), strJCode, lQty, lRet);
+						pMdlg->m_pStatusDlg->m_ListStatus.InsertString(-1, strStr);
+						theApp.m_pLog->Log(strStr);
+
+						return;
+					}
+				}
+			}
+		}
+
+		
+	}
+
+
 }
 
 void CRateDlg::SetTotalRate()

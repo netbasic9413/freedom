@@ -216,6 +216,13 @@ void CRealAddDlg::OnReceiveTrDataKhopenapictrl(LPCTSTR sScrNo, LPCTSTR sRQName, 
 {// 시세조회 수신 이벤트
 	CString strRQName = sRQName;
 
+	if (strRQName == _T("주식주문"))		// 주식기본정보 설정
+	{
+		// 주문 번호
+		CString strData = theApp.m_khOpenApi.GetCommData(sTrcode, sRQName, 0, _T("주문번호"));	strData.Trim();
+		//((CEdit*)GetDlgItem(IDC_EDT_ORGNO))->SetWindowText(strData);
+	}
+
 	if (strRQName == _T("호가"))			// 주식호가 설정
 	{
 	CString strData;
@@ -249,6 +256,16 @@ void CRealAddDlg::OnReceiveTrDataKhopenapictrl(LPCTSTR sScrNo, LPCTSTR sRQName, 
 
 void CRealAddDlg::OnReceiveMsgKhopenapictrl(LPCTSTR sScrNo, LPCTSTR sRQName, LPCTSTR sTrCode, LPCTSTR sMsg)
 {// 메시지 수신 이벤트
+	CKhOpenApiTestDlg* pMdlg = (CKhOpenApiTestDlg*)::AfxGetMainWnd();
+		if (pMdlg->m_pStatusDlg != NULL)
+		{
+			//int nGetCount = pMdlg->m_pStatusDlg->m_ListStatus.GetCount();
+			CString strStr = sMsg;
+			//strStr.Format(_T("%s [매수] %s 시장가 %ld주, 에러발생, 에러코드: %ld"), theApp.m_pLog->GetTime(), strJCode, lQty, lRet);
+			pMdlg->m_pStatusDlg->m_ListStatus.InsertString(-1, strStr);
+			//theApp.m_pLog->Log(strStr);
+		}
+	
 }
 
 void CRealAddDlg::OnReceiveRealDataKhopenapictrl(LPCTSTR sJongmokCode, LPCTSTR sRealType, LPCTSTR sRealData)
@@ -629,7 +646,7 @@ void CRealAddDlg::OnBnClickedButton1()
 		return;
 	}
 
-	theApp.m_pLog->Log("실시간 조건을 검색합니다.");
+	//theApp.m_pLog->Log("실시간 조건을 검색합니다.");
 
 	/// 종목편입, 이탈 로그 삭제
 	m_listCtl_Insert.ResetContent();
@@ -691,7 +708,8 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 		return;
 	}
 
-
+	//종목명
+	//CString strEventName = arrData.GetAt(1);
 	//현재가
 	CString strCurPrice = arrData.GetAt(2);
 	//등락률
@@ -710,7 +728,7 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 		//등락률비교
 		if (nHighLowRate >= 1.0)
 		{
-			if (m_nBuyCount < 3)
+			if (m_nBuyCount < 2)
 			{
 				//매수
 				CString strRQName(_T("주식주문"));
@@ -733,12 +751,12 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 				{
 
 					/// 현금(현물)주문이면...
-					lRet = theApp.m_khOpenApi.SendOrder(strRQName, m_strScrNo, m_strAcc1, lOrderType, strJCode, lQty, lPrice, strHogaGb, strOrgNo);
-					if (lRet == OP_ERR_ORD_OVERFLOW)
-					{
-						Sleep(300);
-						
-					}
+					lRet = theApp.m_khOpenApi.SendOrder(strRQName, "0002", m_strAcc1, lOrderType, strJCode, lQty, lPrice, strHogaGb, strOrgNo);
+					//Sleep(300);
+					//if (lRet == OP_ERR_ORD_OVERFLOW)
+					//{
+					//	Sleep(300);
+					//}
 					
 					CKhOpenApiTestDlg* pMdlg = (CKhOpenApiTestDlg*)::AfxGetMainWnd();
 					if (lRet < 0)
@@ -826,7 +844,7 @@ void CRealAddDlg::OnTimer(UINT_PTR nIDEvent)
 	if (nIDEvent == 2002)
 	{
 		KillTimer(2002);
-		//OnBnClickedBtnSendcond();
+		OnBnClickedBtnSendcond();
 		SetTimer(2003, 1000, NULL);
 	}
 
@@ -838,3 +856,37 @@ void CRealAddDlg::OnTimer(UINT_PTR nIDEvent)
 
 	CDialogEx::OnTimer(nIDEvent);
 }
+
+
+
+
+
+
+
+
+
+void CRealAddDlg::OnReceiveChejanData(LPCTSTR sGubun, LONG nItemCnt, LPCTSTR sFidList)
+{
+	CString strGubun(sGubun), strFidList(sFidList), strText;
+	CString	strAccNo, strOrdNo, strOrdPrice, strOrdCnt;
+
+	int			nIndex(0);
+	CString		strFID, strOneData, strFIDName;
+	while (AfxExtractSubString(strFID, strFidList, nIndex++, _T(';')))
+	{
+		//if (m_mapFIDName.Lookup(strFID, strFIDName) == FALSE)
+		//	strFIDName = strFID;
+
+		if (strFIDName.IsEmpty())	
+			strFIDName = strFID;
+
+		strOneData = theApp.m_khOpenApi.GetChejanData(atoi(strFID)).Trim();
+
+		strText.Format(_T("구분[%s] FID[%4s:%s] = [%s]"), strGubun, strFID, strFIDName, strOneData);
+		//m_listCtl.AddString(strText);
+		strFIDName.Empty();
+	}
+}
+
+
+

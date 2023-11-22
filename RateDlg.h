@@ -28,6 +28,8 @@ public:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 
 public:
+	int m_nSellCount;
+	CString m_strAcc1;
 	CWnd*					m_pParent;
 	CString					m_strScrNo;
 	CMapStringToString		m_mapJongCode;		// 리얼등록 종목
