@@ -109,8 +109,8 @@ void CAutoTradingConf::OnBnClickedOk()
 	//[CONF_FILE_PATH]
 	if (m_strExeMacro.GetLength() <= 0)
 	{
-		AfxMessageBox("자동매매 설정을 먼저 저장 해 주세요.");
-		return;
+		//AfxMessageBox("자동매매 설정을 먼저 저장 해 주세요.");
+		//return;
 	}
 	::WritePrivateProfileString("EXE_MACRO", "file_path", (LPCSTR)m_strExeMacro, strExeMacro);
 
@@ -132,6 +132,14 @@ void CAutoTradingConf::OnBnClickedOk()
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_per_count", "0", szItem, nSize, strGetExeMacroPath);
 	theApp.m_nEventSellPerCount = atoi(szItem);
+
+
+
+	//매수기준 등락률
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_hl_rate", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_dEventBuyHLRate = atof(szItem);
+
 
 	//종목별익절
 	//종목익절 (check)
@@ -290,7 +298,7 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_per_count", (LPCSTR)str, strFileName);
 
 
-	//자동매수조건설정_종목별 한번매수 주수
+	//자동매수조건설정_종목별 한번매도 주수
 	((CEdit*)GetDlgItem(IDC_EDIT_EVENT_SELL_PER_COUNT))->GetWindowText(str);
 	if (str.GetLength() <= 0)
 	{
@@ -298,6 +306,19 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 		return;
 	}
 	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_per_count", (LPCSTR)str, strFileName);
+
+
+
+
+	//매수기준 등락률
+	((CEdit*)GetDlgItem(IDC_EDIT_BUY_HL_RATE))->GetWindowText(str);
+	if (str.GetLength() <= 0)
+	{
+		AfxMessageBox("매수기준 등락률을 입력 해 주세요.");
+		return;
+	}
+	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_hl_rate", (LPCSTR)str, strFileName);
+
 
 
 
@@ -568,34 +589,43 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 	
 }	
 
-
-	
-	
-
-
-void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
+void CAutoTradingConf::LoadConfig(int nType)
 {
-	CString strPathName;
-	char szFilter[] = "config (*.ini, *.conf) | *.ini;*.conf | All Files(*.*)|*.*||";
-	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY, szFilter);
-	if (IDOK == dlg.DoModal()) {
-		strPathName = dlg.GetPathName();
-	}
-
-	if (strPathName.GetLength() <= 0)
-	{
-		return;
-	}
-
 	TCHAR szTmp[200];
 	memset(szTmp, 0, 200);
-	CString strFileName = dlg.GetFileName();
-	StrCpy(szTmp, strFileName);
-	PathRemoveExtension(szTmp);
-	char szItem[80];
+	char szItem[256];
 	int nSize = sizeof(szItem);
 	memset(szItem, 0, nSize);
-	SetDlgItemText(IDC_EDIT_TRADING_STRATEGY, szTmp);
+	CString strPathName;
+
+	if (nType == 1) //file dialog open
+	{
+		//CString strPathName;
+		char szFilter[] = "config (*.ini, *.conf) | *.ini;*.conf | All Files(*.*)|*.*||";
+		CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY, szFilter);
+		if (IDOK == dlg.DoModal()) {
+			strPathName = dlg.GetPathName();
+		}
+
+		if (strPathName.GetLength() <= 0)
+		{
+			return;
+		}
+		
+		CString strFileName = dlg.GetFileName();
+		StrCpy(szTmp, strFileName);
+		PathRemoveExtension(szTmp);
+		SetDlgItemText(IDC_EDIT_TRADING_STRATEGY, szTmp);
+	}
+	else if (nType == 2)
+	{
+		CString strExeMacro = theApp.m_sAppPath + "/data/exe_macro.ini";
+
+		::GetPrivateProfileString("EXE_MACRO", "file_path", "0", szItem, sizeof(szItem), strExeMacro);
+		strPathName = szItem;
+	}
+
+	
 
 
 	//시작시 자동매매
@@ -646,6 +676,11 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_per_count", "", szItem, nSize, strPathName);
 	SetDlgItemText(IDC_EDIT_EVENT_SELL_PER_COUNT, LPCTSTR(szItem));
 
+	//매수기준 등락률
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_hl_rate", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_BUY_HL_RATE, LPCTSTR(szItem));
+
 	//매수조건식 (check)
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_buy_macro", "0", szItem, nSize, strPathName);
@@ -673,19 +708,19 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_sel_macro", "0", szItem, nSize, strPathName);
 	m_checkAutoExe.SetCheck(atoi(szItem));
 
-	//보유종목 대상 실행 
+	//보유종목 대상 실행
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "check_exe_ownevent", "0", szItem, nSize, strPathName);
 	m_checkAutoExe.SetCheck(atoi(szItem));
 	*/
-	
+
 	//보유종목 대상 실행 (시간)
 	/*
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "buy_macro_time_start", "", szItem, nSize, strPathName);
 	SetDlgItemText(IDC_EDIT_MIN_TIME, LPCTSTR(szItem));
 	*/
-	
+
 
 
 	//시간일괄청산 설정 (check)
@@ -698,7 +733,7 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	::GetPrivateProfileString("AUTO_BUY_COND_CONF", "atonce_selltime", "0", szItem, nSize, strPathName);
 	SetDlgItemText(IDC_EDIT_AT_ONCE_TIME, LPCTSTR(szItem));
 
-	
+
 
 	//전체청산방식
 	//익절률 (check)
@@ -797,6 +832,33 @@ void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("ETC_CONF", "check_fastbuy", "0", szItem, nSize, strPathName);
 	m_checkFastBuy.SetCheck(atoi(szItem));
+
+
+
+
+}
+	
+	
+
+
+void CAutoTradingConf::OnBnClickedBtnOpenStrategy()
+{
+	/*
+	* CString strPathName;
+	char szFilter[] = "config (*.ini, *.conf) | *.ini;*.conf | All Files(*.*)|*.*||";
+	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY, szFilter);
+	if (IDOK == dlg.DoModal()) {
+		strPathName = dlg.GetPathName();
+	}
+
+	if (strPathName.GetLength() <= 0)
+	{
+		return;
+	}
+	*/
+	
+
+	LoadConfig(1);
 
 }
 
@@ -1071,4 +1133,16 @@ void CAutoTradingConf::OnClose()
 	m_pParent->SendMessage(UM_SCRENN_CLOSE, 5U, 0L);
 
 	CDialogEx::OnClose();
+}
+
+
+BOOL CAutoTradingConf::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+	
+
+	LoadConfig(2);
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // EXCEPTION: OCX Property Pages should return FALSE
 }

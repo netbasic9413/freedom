@@ -724,10 +724,11 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 	//비교 자동 매수
 	
 	//거래량 비교
-	if (nVolume >= 300000)
+	//if ((theApp.m_nEventlSmallestVolume !=0) && (nVolume >= theApp.m_nEventlSmallestVolume))
 	{
 		//등락률비교
-		if (nHighLowRate >= 1.0)
+		//if (theApp.m_nEventProfitChk && (nHighLowRate >= theApp.m_nEventProfitRate))
+		if(nHighLowRate >= 1.2)
 		{
 			if (m_nBuyCount < 2)
 			{

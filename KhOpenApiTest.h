@@ -114,6 +114,8 @@ public:
 	int m_nEventBuyPerCount;
 	//종목별 한번 매도별 주수
 	int m_nEventSellPerCount;
+	//매수기준 등락률
+	double m_dEventBuyHLRate;
 
 
 

@@ -13,6 +13,7 @@ public:
 
 
 public:
+	void LoadConfig(int nType);
 	CWnd* m_pParent;
 	CString		m_strScrNo;
 	CString		m_strExeMacro;
@@ -101,4 +102,5 @@ public:
 	virtual void OnOK();
 
 	afx_msg void OnClose();
+	virtual BOOL OnInitDialog();
 };
