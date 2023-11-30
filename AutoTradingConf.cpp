@@ -141,6 +141,19 @@ void CAutoTradingConf::OnBnClickedOk()
 	theApp.m_dEventBuyHLRate = atof(szItem);
 
 
+
+	//매수반복회수
+	theApp.m_nBuyCount = 0;
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_count", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventBuyCount = atof(szItem);
+
+	//매도반복회수
+	theApp.m_nSellCount = 0;
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_count", "0", szItem, nSize, strGetExeMacroPath);
+	theApp.m_nEventSellCount = atof(szItem);
+
+
+
 	//종목별익절
 	//종목익절 (check)
 	memset(szItem, 0, nSize);
@@ -320,7 +333,13 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_hl_rate", (LPCSTR)str, strFileName);
 
 
+	//매수반복회수
+	((CEdit*)GetDlgItem(IDC_EDIT_BUY_COUNT))->GetWindowText(str);
+	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_count", (LPCSTR)str, strFileName);
 
+	//매도반복회수
+	((CEdit*)GetDlgItem(IDC_EDIT_SELL_COUNT))->GetWindowText(str);
+	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_count", (LPCSTR)str, strFileName);
 
 	//자동매수조건설정_매수조건식(체크)
 	int nGetChkBuyMacro = m_checkBuyMacro.GetCheck();
@@ -680,6 +699,18 @@ void CAutoTradingConf::LoadConfig(int nType)
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_hl_rate", "", szItem, nSize, strPathName);
 	SetDlgItemText(IDC_EDIT_BUY_HL_RATE, LPCTSTR(szItem));
+
+	//매수반복회수
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_count", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_BUY_COUNT, LPCTSTR(szItem));
+
+	//매도반복회수
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_count", "", szItem, nSize, strPathName);
+	SetDlgItemText(IDC_EDIT_SELL_COUNT, LPCTSTR(szItem));
+
+
 
 	//매수조건식 (check)
 	memset(szItem, 0, nSize);

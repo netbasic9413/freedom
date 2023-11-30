@@ -709,6 +709,10 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 		return;
 	}
 
+
+	if (!theApp.m_bAutoTrading)
+		return;
+
 	//종목명
 	//CString strEventName = arrData.GetAt(1);
 	//현재가
@@ -730,7 +734,7 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 		//if (theApp.m_nEventProfitChk && (nHighLowRate >= theApp.m_nEventProfitRate))
 		if(nHighLowRate >= 1.2)
 		{
-			if (m_nBuyCount < 2)
+			if (theApp.m_nBuyCount < theApp.m_nEventBuyCount)
 			{
 				//매수
 				CString strRQName(_T("주식주문"));
@@ -754,7 +758,7 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 
 					/// 현금(현물)주문이면...
 					lRet = theApp.m_khOpenApi.SendOrder(strRQName, "0002", m_strAcc1, lOrderType, strJCode, lQty, lPrice, strHogaGb, strOrgNo);
-					//Sleep(300);
+					Sleep(300);
 					//if (lRet == OP_ERR_ORD_OVERFLOW)
 					//{
 					//	Sleep(300);

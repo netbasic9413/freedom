@@ -116,6 +116,9 @@ BOOL CKhOpenApiTestApp::InitInstance()
 	m_pLog->Log("프로그램 시작");
 
 
+	m_bAutoTrading = FALSE;
+
+
 	CKhOpenApiTestDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();

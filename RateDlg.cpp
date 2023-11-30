@@ -511,11 +511,14 @@ void CRateDlg::SetRate(int nRow, CString strCode)
 
 	//andy
 	//매도
+	if (!theApp.m_bAutoTrading)
+		return;
+
 	double dRate = atof(strTemp);
 	//종목익절 (check) and 종목익절률
 	if ((dRate > theApp.m_nEventProfitRate) && theApp.m_nEventProfitChk)
 	{
-		if (m_nSellCount < 2)
+		if (theApp.m_nSellCount < theApp.m_nEventSellCount)
 		{
 
 			CString strRQName(_T("주식주문"));
@@ -538,7 +541,7 @@ void CRateDlg::SetRate(int nRow, CString strCode)
 			{
 				/// 현금(현물)주문이면...
 				lRet = theApp.m_khOpenApi.SendOrder(strRQName, "0002", m_strAcc1, lOrderType, strJCode, lQty, lPrice, strHogaGb, strOrgNo);
-				//Sleep(300);
+				Sleep(300);
 
 			}
 

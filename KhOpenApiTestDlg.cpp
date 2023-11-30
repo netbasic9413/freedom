@@ -998,6 +998,14 @@ void CKhOpenApiTestDlg::OnBnClickedBtnStartAutoRun()
 	*/
 
 
+	if (theApp.m_bAutoTrading) 
+		return;
+	theApp.m_bAutoTrading = TRUE;
+	
+	CString strMsg = _T("자동매매실행중...");
+		
+	SetDlgItemText(IDC_ST_AUTOTRADE, strMsg);
+
 	
 }
 
@@ -1005,6 +1013,16 @@ void CKhOpenApiTestDlg::OnBnClickedBtnStartAutoRun()
 void CKhOpenApiTestDlg::OnBnClickedBtnStopAutoRun()
 {
 	m_bAutoBuySell = TRUE;
+
+	if (!theApp.m_bAutoTrading)
+		return;
+	theApp.m_bAutoTrading = FALSE;
+
+	CString strMsg = _T("자동매매 중지");
+
+	SetDlgItemText(IDC_ST_AUTOTRADE, strMsg);
+
+
 }
 
 

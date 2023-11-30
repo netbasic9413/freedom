@@ -117,7 +117,14 @@ public:
 	//매수기준 등락률
 	double m_dEventBuyHLRate;
 
+	BOOL m_bAutoTrading;
 
+	//매수반복회수
+	int m_nBuyCount;
+	int m_nEventBuyCount;
+	//매도반복회수
+	int m_nSellCount;
+	int m_nEventSellCount;
 
 
 
