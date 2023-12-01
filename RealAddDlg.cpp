@@ -758,7 +758,7 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 
 					/// 현금(현물)주문이면...
 					lRet = theApp.m_khOpenApi.SendOrder(strRQName, "0002", m_strAcc1, lOrderType, strJCode, lQty, lPrice, strHogaGb, strOrgNo);
-					Sleep(300);
+					//Sleep(300);
 					//if (lRet == OP_ERR_ORD_OVERFLOW)
 					//{
 					//	Sleep(300);
@@ -780,7 +780,7 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 					}
 					else
 					{
-						m_nBuyCount++;
+						theApp.m_nBuyCount++;
 
 						//CKhOpenApiTestDlg* pMdlg = (CKhOpenApiTestDlg*)::AfxGetMainWnd();
 						if (pMdlg->m_pStatusDlg != NULL)

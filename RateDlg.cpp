@@ -541,7 +541,7 @@ void CRateDlg::SetRate(int nRow, CString strCode)
 			{
 				/// 현금(현물)주문이면...
 				lRet = theApp.m_khOpenApi.SendOrder(strRQName, "0002", m_strAcc1, lOrderType, strJCode, lQty, lPrice, strHogaGb, strOrgNo);
-				Sleep(300);
+				//Sleep(300);
 
 			}
 
@@ -549,7 +549,7 @@ void CRateDlg::SetRate(int nRow, CString strCode)
 
 			if (lRet == 0)
 			{
-				m_nSellCount++;
+				theApp.m_nSellCount++;
 				if (pMdlg->m_pStatusDlg != NULL)
 				{
 					CString strStr;
