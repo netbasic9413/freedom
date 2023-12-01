@@ -921,7 +921,7 @@ void CKhOpenApiTestDlg::OnBnClickedButton1()
 
 
 		::GetWindowRect(m_pRateDlg->m_hWnd, &rcPosStatusDlg);
-		m_pRateDlg->MoveWindow(rcPos.left + 760, rcPos.top, rcPosStatusDlg.Width(), rcPosStatusDlg.Height(), 0);
+		m_pRateDlg->MoveWindow(rcPos.left, rcPos.top-400, rcPosStatusDlg.Width(), rcPosStatusDlg.Height(), 0);
 	}
 
 	/*
@@ -963,11 +963,21 @@ void CKhOpenApiTestDlg::OnBnClickedBtnAutoConfig()
 	m_mapScreen.SetAt(pAutoTradingConf->m_strScrNo, pAutoTradingConf);
 	*/
 
+
+	RECT rcPos;
+	CRect rcPosDlg;
+
+	::GetWindowRect(this->m_hWnd, &rcPos);
+
 	m_pAutoTradingConf = new CAutoTradingConf(this);
 	m_pAutoTradingConf->m_strScrNo.Format("%04d", m_nScrN0);
 	m_pAutoTradingConf->Create(IDD_AUTO_CONF_DLG);
 
 	m_mapScreen.SetAt(m_pAutoTradingConf->m_strScrNo, m_pAutoTradingConf);
+
+	::GetWindowRect(m_pAutoTradingConf->m_hWnd, &rcPosDlg);
+	m_pAutoTradingConf->MoveWindow(rcPos.left + 740, rcPos.top, rcPosDlg.Width(), rcPosDlg.Height(), 0);
+
 }
 
 
@@ -1034,6 +1044,8 @@ void CKhOpenApiTestDlg::OnTimer(UINT_PTR nIDEvent)
 		//OnBnClickedButton1();
 		//OnBnClickedBtnStartAutoRun();
 		CreateStatusDlg();
+		OnBnClickedButton1();
+		OnBnClickedBtnAutoConfig();
 
 		KillTimer(1001);
 	}

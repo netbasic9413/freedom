@@ -74,6 +74,7 @@ public:
 	// 그리드 데이타 설정(주식기본정보 설정)
 	void SetDataRealAddGrid(CStringArray &arrData, CString strRealType = "");
 	void InitAcc();
+	void SetAcc();
 
 // 구현입니다.
 protected:
@@ -89,4 +90,6 @@ protected:
 	virtual void OnCancel();
 	virtual void OnOK();
 	virtual void PostNcDestroy();
+public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

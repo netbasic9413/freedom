@@ -118,6 +118,7 @@ BEGIN_MESSAGE_MAP(CRateDlg, CDialogEx)
 	ON_WM_CLOSE()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BTN_SEARCH, OnBtnSearch)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 //*******************************************************************/
@@ -149,6 +150,8 @@ BOOL CRateDlg::OnInitDialog()
 	SetDlgItemText(IDC_ST_RATE_INFO, strMsg);
 
 	m_nSellCount = 0;
+
+	/*
 	InitAcc();
 
 	CString strMainCfg = theApp.m_sAppPath + "/data/main_cfg.ini";
@@ -158,11 +161,38 @@ BOOL CRateDlg::OnInitDialog()
 	::GetPrivateProfileString("MAIN_CFG", "acc_1", "0", szItem, nSize, strMainCfg);
 	//계좌번호 저장
 	m_strAcc1 = (LPCSTR)(LPSTR)szItem;
+	*/
+	
 
 
+
+	SetTimer(4001, 3000, NULL);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
+
+
+void CRateDlg::SetAcc()
+{
+	CString strMainCfg = theApp.m_sAppPath + "/data/main_cfg.ini";
+	char szItem[20];
+	int nSize = sizeof(szItem);
+	memset(szItem, 0, nSize);
+	::GetPrivateProfileString("MAIN_CFG", "acc_1", "0", szItem, nSize, strMainCfg);
+	//계좌번호 저장
+	m_strAcc1 = (LPCSTR)(LPSTR)szItem;
+
+	if (m_strAcc1.GetLength() >= 2)
+	{
+		((CStatic*)GetDlgItem(IDC_EDT_ACC))->SetWindowText(m_strAcc1);
+	}
+	else
+	{
+		InitAcc();
+	}
+
+}
+
 
 void CRateDlg::OnPaint()
 {
@@ -686,4 +716,29 @@ void CRateDlg::PostNcDestroy()
 	
 	//delete this;
 	//CDialogEx::PostNcDestroy();
+}
+
+
+void CRateDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	if (4001 == nIDEvent)
+	{
+
+		CString strLoginStatus = theApp.m_khOpenApi.GetLoginInfo(_T("USER_ID"));
+		if (strLoginStatus.CompareNoCase(_T("netbasic")) == 0)
+		{
+			KillTimer(4001);
+			SetAcc();
+			SetTimer(4002, 3000, NULL);
+			//OnBtnSearch();
+		}
+		
+	}
+	else if (4002 == nIDEvent)
+	{
+		KillTimer(4002);
+		OnBtnSearch();
+	}
+
+	CDialogEx::OnTimer(nIDEvent);
 }

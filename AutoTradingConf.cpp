@@ -145,12 +145,12 @@ void CAutoTradingConf::OnBnClickedOk()
 	//매수반복회수
 	theApp.m_nBuyCount = 0;
 	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_count", "0", szItem, nSize, strGetExeMacroPath);
-	theApp.m_nEventBuyCount = atof(szItem);
+	theApp.m_nEventBuyCount = atoi(szItem);
 
 	//매도반복회수
 	theApp.m_nSellCount = 0;
 	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_count", "0", szItem, nSize, strGetExeMacroPath);
-	theApp.m_nEventSellCount = atof(szItem);
+	theApp.m_nEventSellCount = atoi(szItem);
 
 
 

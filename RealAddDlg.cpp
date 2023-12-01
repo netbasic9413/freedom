@@ -102,7 +102,7 @@ BOOL CRealAddDlg::OnInitDialog()
 
 
 
-	SetTimer(2001, 2000, NULL);
+	SetTimer(2001, 3000, NULL);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -839,10 +839,10 @@ void CRealAddDlg::OnTimer(UINT_PTR nIDEvent)
 		CString strLoginStatus = theApp.m_khOpenApi.GetLoginInfo(_T("USER_ID"));
 		if (strLoginStatus.CompareNoCase(_T("netbasic")) == 0)
 		{
-			Sleep(500);
+			//Sleep(500);
 			KillTimer(2001);
 			OnBnClickedBtnCondi();
-			SetTimer(2002, 2000, NULL);
+			SetTimer(2002, 3000, NULL);
 		}
 
 	}
@@ -851,7 +851,7 @@ void CRealAddDlg::OnTimer(UINT_PTR nIDEvent)
 	{
 		KillTimer(2002);
 		OnBnClickedBtnSendcond();
-		SetTimer(2003, 2000, NULL);
+		SetTimer(2003, 3000, NULL);
 	}
 
 	if (nIDEvent == 2003)
