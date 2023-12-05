@@ -661,10 +661,18 @@ void CAutoTradingConf::LoadConfig(int nType)
 		::GetPrivateProfileString("EXE_MACRO", "file_path", "0", szItem, sizeof(szItem), strExeMacro);
 		strPathName = szItem;
 
+
+		
+
 		memset(szTmp, 0, 200);
 		StrCpy(szTmp, strPathName);
-		PathRemoveExtension(szTmp);
-		SetDlgItemText(IDC_EDIT_TRADING_STRATEGY, szTmp);
+		CString strFile = PathFindFileName(szTmp);
+
+		char szFile[256];
+		memset(szFile, 0, sizeof(szFile));
+		StrCpy(szFile, strFile);
+		PathRemoveExtension(szFile);
+		SetDlgItemText(IDC_EDIT_TRADING_STRATEGY, szFile);
 	}
 
 	m_strExeMacro = strPathName;
