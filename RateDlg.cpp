@@ -544,6 +544,10 @@ void CRateDlg::SetRate(int nRow, CString strCode)
 	if (!theApp.m_bAutoTrading)
 		return;
 
+	//check_매도회수
+	if (!theApp.m_bSell)
+		return;
+
 	double dRate = atof(strTemp);
 	//종목익절 (check) and 종목익절률
 	if ((dRate > theApp.m_nEventProfitRate) && theApp.m_nEventProfitChk)

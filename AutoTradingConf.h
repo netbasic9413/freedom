@@ -103,4 +103,8 @@ public:
 
 	afx_msg void OnClose();
 	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedCheckBuyCount();
+	CButton m_checkBuyCount;
+	CButton m_checkSellCount;
+	afx_msg void OnBnClickedCheckSellCount();
 };

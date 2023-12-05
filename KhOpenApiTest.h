@@ -120,9 +120,11 @@ public:
 	BOOL m_bAutoTrading;
 
 	//매수반복회수
+	BOOL m_bBuy;
 	int m_nBuyCount;
 	int m_nEventBuyCount;
 	//매도반복회수
+	BOOL m_bSell;
 	int m_nSellCount;
 	int m_nEventSellCount;
 

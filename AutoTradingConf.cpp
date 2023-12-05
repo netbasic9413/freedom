@@ -51,6 +51,8 @@ void CAutoTradingConf::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK_FAST_BUY, m_checkFastBuy);
 	DDX_Control(pDX, IDC_CHECK_EVENT_MAX_PROFIT_RATIO, m_checkEventMaxProfit);
 	DDX_Control(pDX, IDC_CHECK_AT_ONCE_SEL_TIME, m_checkAtOnceSelTime);
+	DDX_Control(pDX, IDC_CHECK_BUY_COUNT, m_checkBuyCount);
+	DDX_Control(pDX, IDC_CHECK_SELL_COUNT, m_checkSellCount);
 }
 
 
@@ -88,6 +90,8 @@ BEGIN_MESSAGE_MAP(CAutoTradingConf, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_LOAD_BUYMACRO, &CAutoTradingConf::OnBnClickedBtnLoadBuymacro)
 	//ON_BN_CLICKED(IDCANCEL, &CAutoTradingConf::OnBnClickedCancel)
 	ON_WM_CLOSE()
+	ON_BN_CLICKED(IDC_CHECK_BUY_COUNT, &CAutoTradingConf::OnBnClickedCheckBuyCount)
+	ON_BN_CLICKED(IDC_CHECK_SELL_COUNT, &CAutoTradingConf::OnBnClickedCheckSellCount)
 END_MESSAGE_MAP()
 
 
@@ -143,11 +147,13 @@ void CAutoTradingConf::OnBnClickedOk()
 
 
 	//매수반복회수
+	theApp.m_bBuy = m_checkBuyCount.GetCheck();
 	theApp.m_nBuyCount = 0;
 	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_count", "0", szItem, nSize, strGetExeMacroPath);
 	theApp.m_nEventBuyCount = atoi(szItem);
 
 	//매도반복회수
+	theApp.m_bSell = m_checkSellCount.GetCheck();
 	theApp.m_nSellCount = 0;
 	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_sell_count", "0", szItem, nSize, strGetExeMacroPath);
 	theApp.m_nEventSellCount = atoi(szItem);
@@ -333,9 +339,21 @@ void CAutoTradingConf::OnBnClickedBtnSaveStrategy()
 	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_hl_rate", (LPCSTR)str, strFileName);
 
 
+	//check_매수반복회수
+	int nGetChkBuy = m_checkBuyCount.GetCheck();
+	CString strBuy;
+	strBuy.Format(_T("%d"), nGetChkBuy);
+	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "check_buy_count", (LPCSTR)strBuy, strFileName);
+
 	//매수반복회수
 	((CEdit*)GetDlgItem(IDC_EDIT_BUY_COUNT))->GetWindowText(str);
 	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_count", (LPCSTR)str, strFileName);
+
+	//check_매도반복회수
+	int nGetChkSell = m_checkSellCount.GetCheck();
+	CString strSell;
+	strSell.Format(_T("%d"), nGetChkSell);
+	::WritePrivateProfileString("AUTO_BUYSELL_PER_COUNT", "check_sell_count", (LPCSTR)strSell, strFileName);
 
 	//매도반복회수
 	((CEdit*)GetDlgItem(IDC_EDIT_SELL_COUNT))->GetWindowText(str);
@@ -642,9 +660,14 @@ void CAutoTradingConf::LoadConfig(int nType)
 
 		::GetPrivateProfileString("EXE_MACRO", "file_path", "0", szItem, sizeof(szItem), strExeMacro);
 		strPathName = szItem;
+
+		memset(szTmp, 0, 200);
+		StrCpy(szTmp, strPathName);
+		PathRemoveExtension(szTmp);
+		SetDlgItemText(IDC_EDIT_TRADING_STRATEGY, szTmp);
 	}
 
-	
+	m_strExeMacro = strPathName;
 
 
 	//시작시 자동매매
@@ -700,10 +723,22 @@ void CAutoTradingConf::LoadConfig(int nType)
 	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_hl_rate", "", szItem, nSize, strPathName);
 	SetDlgItemText(IDC_EDIT_BUY_HL_RATE, LPCTSTR(szItem));
 
+
+	//check_매수반복회수
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "check_buy_count", "0", szItem, nSize, strPathName);
+	m_checkBuyCount.SetCheck(atoi(szItem));
+
+
+
 	//매수반복회수
 	memset(szItem, 0, nSize);
 	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "event_buy_count", "", szItem, nSize, strPathName);
 	SetDlgItemText(IDC_EDIT_BUY_COUNT, LPCTSTR(szItem));
+
+	//check_매도반복회수
+	::GetPrivateProfileString("AUTO_BUYSELL_PER_COUNT", "check_sell_count", "0", szItem, nSize, strPathName);
+	m_checkSellCount.SetCheck(atoi(szItem));
+
 
 	//매도반복회수
 	memset(szItem, 0, nSize);
@@ -1176,4 +1211,16 @@ BOOL CAutoTradingConf::OnInitDialog()
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE
+}
+
+
+void CAutoTradingConf::OnBnClickedCheckBuyCount()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+void CAutoTradingConf::OnBnClickedCheckSellCount()
+{
+	// TODO: Add your control notification handler code here
 }

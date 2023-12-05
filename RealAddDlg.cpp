@@ -713,6 +713,10 @@ void CRealAddDlg::AutoBuySell(LPCTSTR sJongmokCode, int nType, CStringArray &arr
 	if (!theApp.m_bAutoTrading)
 		return;
 
+	if (!theApp.m_bBuy)
+		return;
+
+
 	//종목명
 	//CString strEventName = arrData.GetAt(1);
 	//현재가
